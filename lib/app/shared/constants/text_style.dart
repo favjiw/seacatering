@@ -52,6 +52,12 @@ class AppTextStyle {
     color: AppColors.primary,
   );
 
+  static final error = GoogleFonts.roboto(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.error,
+  );
+
   static final caption = GoogleFonts.openSans(
     fontSize: 12.sp,
     color: Colors.grey,

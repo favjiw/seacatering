@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+import '../constants/colors.dart';
+import '../constants/text_style.dart';
+
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
@@ -75,19 +78,20 @@ class CustomTextField extends StatelessWidget {
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
-              color: Colors.red,
+              color: AppColors.error,
             ),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
-              color: Colors.red,
+              color: AppColors.error,
               width: 2,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),
+          errorStyle: AppTextStyle.error,
         ),
       ),
     );
