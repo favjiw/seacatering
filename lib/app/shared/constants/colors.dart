@@ -3,9 +3,11 @@ import 'package:hexcolor/hexcolor.dart';
 
 class AppColors {
   // Primary Colors
-  static final primary = HexColor('#4CAF50'); // hijau
-  static final primaryDark = HexColor('#388E3C');
+  static final primary = HexColor('#85B1B4'); // hijau
+  static final primaryDark = HexColor('#747688');
   static final primaryLight = HexColor('#C8E6C9');
+
+  static final text = HexColor('#120D26');
 
   // Secondary Colors
   static final secondary = HexColor('#FF9800'); // oranye

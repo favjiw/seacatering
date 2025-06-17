@@ -10,9 +10,46 @@ class AppTextStyle {
     color: AppColors.black,
   );
 
+  static final whiteOnBtn = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.white,
+  );
+
+  static final inputStyle = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+  );
+
+  static final hintStyle = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.primaryDark,
+  );
+
+  static final signTitle = GoogleFonts.poppins(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
   static final body = GoogleFonts.roboto(
     fontSize: 14.sp,
-    color: Colors.grey[800],
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final bodyRegular = GoogleFonts.roboto(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.text,
+  );
+
+  static final textBtn = GoogleFonts.roboto(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primary,
   );
 
   static final caption = GoogleFonts.openSans(
