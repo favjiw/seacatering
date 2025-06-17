@@ -80,7 +80,7 @@ class LoginView extends GetView<LoginController> {
                           return null;
                         },
                       ),),
-                      SizedBox(height: 10.h),
+                      // SizedBox(height: 10.h),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -89,7 +89,7 @@ class LoginView extends GetView<LoginController> {
                           child: Text('Forgot Password?', style: AppTextStyle.textBtn,),
                         ),
                       ),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 20.h),
                       CustomButton(
                         width: 271.w,
                         height: 60.h,
