@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
@@ -57,6 +58,33 @@ class CustomTextField extends StatelessWidget {
               ),
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.r),
+            borderSide: BorderSide(
+              color: HexColor('#E4DFDF'),
+              width: 1.w,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.r),
+            borderSide: BorderSide(
+              color: HexColor('#85B1B4'),
+              width: 1.w,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.r),
+            borderSide: BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.r),
+            borderSide: BorderSide(
+              color: Colors.red,
+              width: 2,
+            ),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),
