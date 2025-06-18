@@ -1,16 +1,32 @@
-# seacatering
+# SEA Catering
 
-A new Flutter project.
+## 🖥️ Getting Started
 
-## Getting Started
+Follow these steps to set up the project locally:
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- Firebase configuration for real-time database and notifications.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/favjiw/seacatering.git
+
+2. Navigate to the project directory:
+
+    ```bash
+    cd seacatering
+    
+4. Install the necessary dependencies:
+
+    ```bash
+   flutter pub get
+  
+6. Run the app:
+
+    ```bash
+   flutter run
