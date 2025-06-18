@@ -113,7 +113,9 @@ class LoginView extends GetView<LoginController> {
                     Text('Don\'t have an account?', style: AppTextStyle.body),
                     TextButton(
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed('/signup');
+                      },
                       child: Text('Sign up', style: AppTextStyle.textBtn),
                     ),
           ]),
