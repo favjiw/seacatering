@@ -16,6 +16,12 @@ class AppTextStyle {
     color: AppColors.white,
   );
 
+  static final primaryBtn = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primary,
+  );
+
   static final inputStyle = GoogleFonts.poppins(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
@@ -31,6 +37,18 @@ class AppTextStyle {
   static final signTitle = GoogleFonts.poppins(
     fontSize: 24.sp,
     fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final onboardTitle = GoogleFonts.poppins(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.text,
+  );
+
+  static final onboardDesc = GoogleFonts.poppins(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
     color: AppColors.text,
   );
 
