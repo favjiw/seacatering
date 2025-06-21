@@ -142,7 +142,7 @@ class SignupView extends GetView<SignupController> {
                           borderRadius: 15.r,
                           onPressed: () {
                             if (controller.formKey.currentState!.validate()) {
-                              // controller.signUp();
+                              controller.signUp();
                             }
                           },
                         ),

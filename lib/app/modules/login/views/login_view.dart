@@ -99,9 +99,19 @@ class LoginView extends GetView<LoginController> {
                         borderRadius: 15.r,
                         onPressed: () {
                           if (controller.formKey.currentState!.validate()) {
-                            // controller.signIn();
-                          }
-                        },
+                              controller.signIn(controller.emailController.text, controller.passwordController.text);
+                            } else {
+                              Get.snackbar(
+                                'Form Error',
+                                'Please fill in both email and password.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red.withOpacity(0.8),
+                                colorText: Colors.white,
+                                margin: const EdgeInsets.all(16),
+                                duration: const Duration(seconds: 2),
+                              );
+                            }
+                          },
                       ),
                     ],
                   ),

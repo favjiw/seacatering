@@ -11,6 +11,8 @@ class CustomButton extends StatelessWidget {
   final Color? backgroundColor;
   final double borderRadius;
   final double elevation;
+  final double horizontalPad;
+  final double verticalPad;
   final TextStyle? textStyle;
 
   const CustomButton({
@@ -22,6 +24,8 @@ class CustomButton extends StatelessWidget {
     this.fontSize,
     this.backgroundColor,
     this.borderRadius = 12.0,
+    this.horizontalPad = 0.0,
+    this.verticalPad = 0.0,
     this.elevation = 4.0,
     this.textStyle,
   });
@@ -40,7 +44,7 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius.r),
           ),
           shadowColor: Colors.black.withOpacity(0.25),
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 14.h),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPad.w, vertical: verticalPad.h),
         ),
         child: Text(
           text,

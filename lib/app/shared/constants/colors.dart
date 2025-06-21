@@ -8,11 +8,14 @@ class AppColors {
   static final primaryLight = HexColor('#C8E6C9');
 
   static final text = HexColor('#120D26');
+  static final pageBackground = HexColor('#F2F6FE');
 
   // Secondary Colors
   static final secondary = HexColor('#FF9800'); // oranye
   static final secondaryDark = HexColor('#F57C00');
   static final secondaryLight = HexColor('#FFE0B2');
+
+  static final yellowTitle = HexColor('#F6EF97');
 
   // Neutral Colors
   static final white = Colors.white;
@@ -22,9 +25,9 @@ class AppColors {
   static final darkGray = HexColor('#616161');
 
   // Danger / Warning / Success
-  static final error = HexColor('#F44336'); // merah
-  static final warning = HexColor('#FFC107'); // kuning
-  static final success = HexColor('#4CAF50'); // hijau
+  static final error = HexColor('#F44336');
+  static final warning = HexColor('#FFC107');
+  static final success = HexColor('#4CAF50');
 
   // Background
   static final background = HexColor('#FAFAFA');

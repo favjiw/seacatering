@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:seacatering/app/shared/constants/colors.dart';
 
 class AppTextStyle {
@@ -50,6 +51,30 @@ class AppTextStyle {
     fontSize: 15.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
+  );
+
+  static final heroBtn = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.black,
+  );
+
+  static final heroTitleWhite = GoogleFonts.poppins(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.white,
+  );
+
+  static final heroTitleYellow = GoogleFonts.poppins(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.yellowTitle,
+  );
+
+  static final heroSubtitle = GoogleFonts.poppins(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: HexColor('#E7E7E7'),
   );
 
   static final body = GoogleFonts.roboto(
