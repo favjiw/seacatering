@@ -83,6 +83,40 @@ class AppTextStyle {
     color: AppColors.text,
   );
 
+  static final homeLoc = GoogleFonts.roboto(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.text,
+  );
+
+  static final homeTitle = GoogleFonts.roboto(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+  static final planTitleActive = GoogleFonts.roboto(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final plansSubtitleActive = GoogleFonts.roboto(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: HexColor('#676767'),
+  );
+  static final planTitleInactive = GoogleFonts.roboto(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final plansSubtitleInactive = GoogleFonts.roboto(
+    fontSize: 9.sp,
+    fontWeight: FontWeight.w400,
+    color: HexColor('#676767'),
+  );
+
   static final bodyRegular = GoogleFonts.roboto(
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,

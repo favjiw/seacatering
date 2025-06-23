@@ -9,6 +9,8 @@ class AppColors {
 
   static final text = HexColor('#120D26');
   static final pageBackground = HexColor('#F2F6FE');
+  static final containerHomeActive = HexColor('#E0B3FF');
+  static final containerHomeInactive = HexColor('#EEEEEE');
 
   // Secondary Colors
   static final secondary = HexColor('#FF9800'); // oranye

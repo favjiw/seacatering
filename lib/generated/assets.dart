@@ -2,6 +2,9 @@
 class Assets {
   Assets._();
 
+  static const String imagesBronze = 'assets/images/bronze.png';
+  static const String imagesDiet = 'assets/images/diet.png';
+  static const String imagesGold = 'assets/images/gold.png';
   static const String imagesHeroContainerImg = 'assets/images/hero-container-img.png';
   static const String imagesOnboard1 = 'assets/images/onboard-1.png';
   static const String imagesOnboard2 = 'assets/images/onboard-2.png';
@@ -9,6 +12,9 @@ class Assets {
   static const String imagesOnboardEllipse1 = 'assets/images/onboard-ellipse-1.png';
   static const String imagesOnboardEllipse2 = 'assets/images/onboard-ellipse-2.png';
   static const String imagesOnboardEllipse3 = 'assets/images/onboard-ellipse-3.png';
+  static const String imagesProtein = 'assets/images/protein.png';
+  static const String imagesRoyal = 'assets/images/royal.png';
   static const String imagesSEA = 'assets/images/SEA.png';
+  static const String imagesSilver = 'assets/images/silver.png';
 
 }
