@@ -1,7 +1,13 @@
 import 'package:get/get.dart';
 
-class SplashController extends GetxController {
-  //TODO: Implement SplashController
+class BotnavbarController extends GetxController {
+  //TODO: Implement BotnavbarController
+
+  var currentIndex = 0.obs;
+
+  void changePage(int index) {
+    currentIndex.value = index;
+  }
 
   final count = 0.obs;
   @override
@@ -12,9 +18,6 @@ class SplashController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(Duration(seconds: 3), () {
-      Get.offAllNamed('/botnavbar');
-    });
   }
 
   @override

@@ -28,6 +28,10 @@ class TestimonialCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(
+          color: AppColors.gray.withOpacity(0.4),
+          width: 1.w,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),

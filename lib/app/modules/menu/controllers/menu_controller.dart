@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class SplashController extends GetxController {
-  //TODO: Implement SplashController
+class MenuPageController extends GetxController {
+  //TODO: Implement MenuController
 
   final count = 0.obs;
   @override
@@ -12,9 +12,6 @@ class SplashController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(Duration(seconds: 3), () {
-      Get.offAllNamed('/botnavbar');
-    });
   }
 
   @override
