@@ -111,7 +111,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   SizedBox(height: 14.h,),
                   Text('Popular Plans', style: AppTextStyle.homeTitle,),
-                  SizedBox(height: 10.h),
+
                 ],
               ),
             ),

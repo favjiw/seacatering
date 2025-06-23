@@ -32,97 +32,97 @@ class PlanCarouselItem extends StatelessWidget {
         children: [
           SizedBox(width: 27.w,),
           SizedBox(
-              width: isActive ? 205.w : 160.w,
-              height: isActive ? 255.h : 200.h,
-              child: Stack(
-                children: [
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: isActive ? 200.w : 160.w,
-                      height: isActive ? 195.h : 154.h,
-                      decoration: BoxDecoration(
-                        color: isActive
-                            ? AppColors.containerHomeActive
-                            : AppColors.containerHomeInactive,
-                        borderRadius: BorderRadius.circular(isActive ? 25.r : 20.r),
-                      ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 15.w),
-                                child: Image.asset(
-                                  badgeImagePath,
-                                  width: isActive ? 30.w : 23.w,
-                                  height: isActive ? 30.h : 23.h,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 30.h),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        title,
-                                        style: isActive
-                                            ? AppTextStyle.planTitleActive
-                                            : AppTextStyle.planTitleInactive,
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      Text(
-                                        subtitle,
-                                        style: isActive
-                                            ? AppTextStyle.plansSubtitleActive
-                                            : AppTextStyle.plansSubtitleInactive,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      Text(
-                                        price,
-                                        style: isActive
-                                            ? AppTextStyle.planTitleActive
-                                            : AppTextStyle.planTitleInactive,
-                                      ),
-                                    ],
+                width: isActive ? 205.w : 160.w,
+                height: isActive ? 245.h : 190.h,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: isActive ? 200.w : 160.w,
+                        height: isActive ? 195.h : 154.h,
+                        decoration: BoxDecoration(
+                          color: isActive
+                              ? AppColors.containerHomeActive
+                              : AppColors.containerHomeInactive,
+                          borderRadius: BorderRadius.circular(isActive ? 25.r : 20.r),
+                        ),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 15.w),
+                                  child: Image.asset(
+                                    badgeImagePath,
+                                    width: isActive ? 30.w : 23.w,
+                                    height: isActive ? 30.h : 23.h,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 30.h),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          title,
+                                          style: isActive
+                                              ? AppTextStyle.planTitleActive
+                                              : AppTextStyle.planTitleInactive,
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        Text(
+                                          subtitle,
+                                          style: isActive
+                                              ? AppTextStyle.plansSubtitleActive
+                                              : AppTextStyle.plansSubtitleInactive,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        Text(
+                                          price,
+                                          style: isActive
+                                              ? AppTextStyle.planTitleActive
+                                              : AppTextStyle.planTitleInactive,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    Positioned(
+                      top: isActive ? 0 : 30,
+                      left: isActive ? 40 : 45,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: isActive ? 120.w : 79.w,
+                        height: isActive ? 120.h : 79.h,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(imagePath),
+                            alignment: Alignment.centerRight,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(100.r),
                         ),
                       ),
                     ),
-                  Positioned(
-                    top: isActive ? 15 : 50,
-                    left: isActive ? 40 : 45,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      width: isActive ? 120.w : 79.w,
-                      height: isActive ? 120.h : 79.h,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(imagePath),
-                          alignment: Alignment.centerRight,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(100.r),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-          ),
+                  ],
+                ),
+            ),
         ],
       ),
     );
