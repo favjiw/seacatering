@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:seacatering/app/shared/constants/colors.dart';
 
 import '../../contact/views/contact_view.dart';
 import '../../home/views/home_view.dart';
@@ -35,9 +36,9 @@ class BotnavbarView extends GetView<BotnavbarController> {
         child: GNav(
           gap: 5,
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
-          color: Colors.grey[600],
-          activeColor: Colors.white,
-          tabBackgroundColor: Colors.blueAccent,
+          color: AppColors.gray,
+          activeColor: AppColors.white,
+          tabBackgroundColor: AppColors.primary,
           selectedIndex: controller.currentIndex.value,
           onTabChange: controller.changePage,
           tabs: [
