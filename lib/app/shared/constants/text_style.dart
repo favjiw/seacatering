@@ -110,6 +110,24 @@ class AppTextStyle {
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
+  static final testimonyTitle = GoogleFonts.roboto(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final testimonyUsername = GoogleFonts.roboto(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+
+  static final testimonyPlan = GoogleFonts.roboto(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: HexColor('#A6A6A6'),
+  );
 
   static final plansSubtitleInactive = GoogleFonts.roboto(
     fontSize: 9.sp,

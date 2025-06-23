@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
 
 import '../../../shared/constants/colors.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/plan_carousel_item.dart';
+import '../../../shared/widgets/testimony_card.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -111,7 +113,6 @@ class HomeView extends GetView<HomeController> {
                   ),
                   SizedBox(height: 14.h,),
                   Text('Popular Plans', style: AppTextStyle.homeTitle,),
-
                 ],
               ),
             ),
@@ -141,6 +142,40 @@ class HomeView extends GetView<HomeController> {
                   },
                 ),
               ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 27.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Testimony', style: AppTextStyle.homeTitle),
+                  TextButton(onPressed: (){}, child: Text('See All', style: AppTextStyle.primaryBtn,),),
+                ],
+              ),
+            ),
+            SizedBox(height: 14.h,),
+            SizedBox(
+              height: 210.h, // Sesuaikan tinggi
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.testimonies.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final testimony = controller.testimonies[index];
+                  return Padding(
+                    padding: EdgeInsets.only(right: 16.w, left: 27.w),
+                    child: TestimonialCard(
+                      content: testimony.content,
+                      userName: testimony.userName,
+                      planName: testimony.planName,
+                      rating: testimony.rating,
+                      avatarUrl: testimony.avatarUrl,
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 100.h,),
           ],
         ),
       ),

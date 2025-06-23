@@ -2,10 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/PlanModel.dart';
+import '../../../data/Testimony.dart';
 
 class HomeController extends GetxController {
   final PageController pageController = PageController(viewportFraction: 0.64);
   final RxInt currentPlanIndex = 0.obs;
+
+  final List<Testimony> testimonies = [
+    Testimony(
+      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+      userName: "Zaki",
+      planName: "Royal Plan",
+      rating: 4,
+    ),
+    Testimony(
+      content: "Very satisfied with the meal plans...",
+      userName: "Sarah",
+      planName: "Diet Plan",
+      rating: 5,
+    ),
+    Testimony(
+      content: "Good service and delicious food...",
+      userName: "John",
+      planName: "Protein Plan",
+      rating: 3,
+    ),
+  ];
 
   final List<PlanModel> plans = [
     PlanModel(
