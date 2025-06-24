@@ -29,23 +29,35 @@ class HomeView extends GetView<HomeController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.location_on_rounded, color: AppColors.black),
-                          SizedBox(width: 5.w),
-                          Text('Send to', style: AppTextStyle.body,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on_rounded, color: AppColors.black),
+                                  SizedBox(width: 5.w),
+                                  Text('Send to', style: AppTextStyle.body,),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                              width: 223.w,
+                              child: Text('Moh Toha, Bandung', style: AppTextStyle.homeLoc, overflow: TextOverflow.ellipsis,)),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.person_rounded, color: AppColors.black),
-                        ],
+                      InkWell(
+                        onTap: () => Get.toNamed('/profile'),
+                        child: CircleAvatar(
+                          backgroundColor: AppColors.gray,
+                          radius: 25.r,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                      width: 223.w,
-                      child: Text('Moh Toha, Bandung', style: AppTextStyle.homeLoc, overflow: TextOverflow.ellipsis,)),
                   SizedBox(height: 14.h,),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 18.w),

@@ -94,6 +94,24 @@ class AppTextStyle {
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
+
+  static final profileEmail = GoogleFonts.roboto(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.gray,
+  );
+
+  static final protileItem = GoogleFonts.roboto(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: HexColor('#231F20'),
+  );
+  static final protileItemTitle = GoogleFonts.roboto(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w600,
+    color: HexColor('#231F20'),
+  );
+
   static final planTitleActive = GoogleFonts.roboto(
     fontSize: 18.sp,
     fontWeight: FontWeight.w500,
@@ -122,11 +140,16 @@ class AppTextStyle {
     color: AppColors.text,
   );
 
-
   static final testimonyPlan = GoogleFonts.roboto(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: HexColor('#A6A6A6'),
+  );
+
+  static final appBarTitle = GoogleFonts.roboto(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.text,
   );
 
   static final plansSubtitleInactive = GoogleFonts.roboto(
