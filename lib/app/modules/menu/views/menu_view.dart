@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:seacatering/app/shared/constants/colors.dart';
 
+import '../../../shared/constants/text_style.dart';
+import '../../../shared/widgets/menu_item_widget.dart';
 import '../controllers/menu_controller.dart';
 
 class MenuView extends GetView<MenuPageController> {
@@ -10,14 +14,38 @@ class MenuView extends GetView<MenuPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MenuView'),
+        title: Text('Menu'),
+        titleTextStyle: AppTextStyle.appBarTitle,
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'MenuView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+      body: SingleChildScrollView(
+        child: Padding(padding: EdgeInsets.symmetric(horizontal: 27.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            MenuItemWidget(
+              title: 'Protein Plan',
+              price: 250000,
+              onViewMore: () {
+
+              },
+            ),
+            MenuItemWidget(
+              title: 'Royal Plan',
+              price: 250000,
+              onViewMore: () {
+
+              },
+            ),
+            MenuItemWidget(
+              title: 'Royal Plan',
+              price: 250000,
+              onViewMore: () {
+
+              },
+            ),
+          ],
+        ),),
       ),
     );
   }

@@ -106,6 +106,7 @@ class AppTextStyle {
     fontWeight: FontWeight.w500,
     color: HexColor('#231F20'),
   );
+
   static final protileItemTitle = GoogleFonts.roboto(
     fontSize: 14.sp,
     fontWeight: FontWeight.w600,
@@ -161,6 +162,12 @@ class AppTextStyle {
   static final bodyRegular = GoogleFonts.roboto(
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
+    color: AppColors.text,
+  );
+
+  static final menuTitle = GoogleFonts.roboto(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
