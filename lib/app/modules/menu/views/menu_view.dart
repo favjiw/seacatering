@@ -22,27 +22,6 @@ class MenuView extends GetView<MenuPageController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MenuItemWidget(
-              title: 'Protein Plan',
-              price: 250000,
-              onViewMore: () {
-
-              },
-            ),
-            MenuItemWidget(
-              title: 'Royal Plan',
-              price: 250000,
-              onViewMore: () {
-
-              },
-            ),
-            MenuItemWidget(
-              title: 'Royal Plan',
-              price: 250000,
-              onViewMore: () {
-
-              },
-            ),
           ],
         ),),
       ),

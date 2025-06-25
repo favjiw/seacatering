@@ -4,15 +4,14 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:seacatering/app/shared/constants/colors.dart';
 
+import '../../contact/controllers/contact_controller.dart';
 import '../../contact/views/contact_view.dart';
 import '../../home/views/home_view.dart';
-import '../../menu/views/menu_view.dart';
+import '../../menu_available/controllers/menu_available_controller.dart';
+import '../../menu_available/views/menu_available_view.dart';
+import '../../subscription/controllers/subscription_controller.dart';
 import '../../subscription/views/subscription_view.dart';
 import '../controllers/botnavbar_controller.dart';
-
-
-
-// Tambahkan import controller secara eksplisit
 import '../../home/controllers/home_controller.dart';
 
 class BotnavbarView extends GetView<BotnavbarController> {
@@ -20,11 +19,14 @@ class BotnavbarView extends GetView<BotnavbarController> {
 
   @override
   Widget build(BuildContext context) {
-    // Bind controller secara manual (hanya sekali)
     Get.lazyPut(() => HomeController(), fenix: true);
+    Get.lazyPut(() => MenuAvailableController(), fenix: true);
+    Get.lazyPut(() => SubscriptionController(), fenix: true);
+    Get.lazyPut(() => ContactController(), fenix: true);
+
     final List<Widget> pages = const [
       HomeView(),
-      MenuView(),
+      MenuAvailableView(),
       SubscriptionView(),
       ContactView(),
     ];

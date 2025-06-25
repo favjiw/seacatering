@@ -5,8 +5,6 @@ import '../controllers/menu_controller.dart';
 class MenuBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<MenuPageController>(
-      () => MenuPageController(),
-    );
+    Get.put(MenuPageController());
   }
 }

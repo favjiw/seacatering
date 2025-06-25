@@ -5,14 +5,16 @@ import 'package:seacatering/app/shared/constants/text_style.dart';
 
 class MenuItemWidget extends StatelessWidget {
   final String title;
-  final int price;
+  final String price;
   final VoidCallback onViewMore;
+  final String image;
 
   const MenuItemWidget({
     super.key,
     required this.title,
     required this.price,
     required this.onViewMore,
+    this.image = '',
   });
 
   @override
@@ -25,26 +27,51 @@ class MenuItemWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: AppTextStyle.menuTitle),
-              Text('Rp${price.toString()}', style: AppTextStyle.menuTitle),
+              Text('${price}', style: AppTextStyle.menuTitle),
             ],
           ),
           SizedBox(height: 10.h),
-          Container(
-            width: 327.w,
-            height: 200.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
-              color: AppColors.gray,
-            ),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: onViewMore,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.black.withOpacity(0.2),
-                  elevation: 0,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15.r),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.network(
+                  image,
+                  width: 327.w,
+                  height: 200.h,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: 327.w,
+                      height: 200.h,
+                      child: Image.asset(
+                        'assets/images/protein.png',
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return SizedBox(
+                      width: 327.w,
+                      height: 200.h,
+                      child: Image.asset(
+                        'assets/images/protein.png',
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
                 ),
-                child: Text('View More', style: AppTextStyle.body),
-              ),
+                ElevatedButton(
+                  onPressed: onViewMore,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.black.withOpacity(0.5),
+                    elevation: 0,
+                  ),
+                  child: Text('View More', style: AppTextStyle.whiteOnBtn),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 20.h),

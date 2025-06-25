@@ -10,6 +10,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/menu/bindings/menu_binding.dart';
 import '../modules/menu/views/menu_view.dart';
+import '../modules/menu_available/bindings/menu_available_binding.dart';
+import '../modules/menu_available/views/menu_available_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.SUBSCRIPTION_CONFIRM,
       page: () => const SubscriptionConfirmView(),
       binding: SubscriptionConfirmBinding(),
+    ),
+    GetPage(
+      name: _Paths.MENU_AVAILABLE,
+      page: () => const MenuAvailableView(),
+      binding: MenuAvailableBinding(),
     ),
   ];
 }

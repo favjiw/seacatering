@@ -1,11 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../data/PlanModel.dart';
 
-class MenuPageController extends GetxController {
+class MenuAvailableController extends GetxController {
+  //TODO: Implement MenuAvailableController
   final menus = <PlanModel>[].obs;
   final isLoading = true.obs;
+
+  final count = 0.obs;
+
+  final currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp',
+    decimalDigits: 0,
+  );
+
+  String formatPrice(int price) {
+    return currencyFormat.format(price);
+  }
 
   Future<void> fetchMenus() async {
     try {
@@ -20,7 +34,6 @@ class MenuPageController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   @override
   void onInit() {
@@ -37,4 +50,6 @@ class MenuPageController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
+  void increment() => count.value++;
 }
