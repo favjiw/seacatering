@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../controllers/storage_service_controller.dart';
+import '../../../data/PlanModel.dart';
 
 class SubscriptionFormController extends GetxController {
   //TODO: Implement SubscriptionFormController
   TextEditingController allergieController = TextEditingController();
   TextEditingController moreController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
   final selectedPlan = 'Diet'.obs;
@@ -12,6 +18,8 @@ class SubscriptionFormController extends GetxController {
   final selectedDeliveryDays = <String>[].obs;
   final RxBool isMealTypeValid = true.obs;
   final RxBool isDeliveryDayValid = true.obs;
+  final mealPlans = <PlanModel>[].obs;
+  final isLoadingMealPlans = true.obs;
 
 
 
@@ -21,7 +29,29 @@ class SubscriptionFormController extends GetxController {
     'Friday', 'Saturday', 'Sunday'
   ];
 
-  final count = 0.obs;
+  Future<void> fetchMealPlans() async {
+    try {
+      isLoadingMealPlans.value = true;
+      final snapshot = await FirebaseFirestore.instance.collection('meal_plans').get();
+      mealPlans.value = snapshot.docs
+          .map((doc) => PlanModel.fromMap(doc.data()))
+          .toList();
+    } catch (e) {
+      Get.snackbar("Error", "Gagal memuat meal plans: $e");
+    } finally {
+      isLoadingMealPlans.value = false;
+    }
+  }
+
+  Future<void> getUsername() async {
+    final storageService = Get.find<StorageService>();
+    final savedUsername = await storageService.getUsername();
+    if (savedUsername != null) {
+      nameController.text = savedUsername;
+    } else {
+      nameController.text = 'Guest';
+    }
+  }
 
 
   bool validateCheckboxFields() {
@@ -59,6 +89,8 @@ class SubscriptionFormController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    getUsername();
+    fetchMealPlans();
   }
 
   @override
@@ -70,6 +102,4 @@ class SubscriptionFormController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

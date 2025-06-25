@@ -199,6 +199,24 @@ class AppTextStyle {
     color: AppColors.text,
   );
 
+  static final confTitle = GoogleFonts.poppins(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final confLabel = GoogleFonts.poppins(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.gray,
+  );
+
+  static final confVal = GoogleFonts.poppins(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
   static final subsSelectedPlan = GoogleFonts.poppins(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,

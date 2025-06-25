@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/storage_service_controller.dart';
+import '../../../data/PlanHome.dart';
 import '../../../data/PlanModel.dart';
 import '../../../data/Testimony.dart';
 
 class HomeController extends GetxController {
   final PageController pageController = PageController(viewportFraction: 0.64);
   final RxInt currentPlanIndex = 0.obs;
+  final RxString address = ''.obs;
 
   final List<Testimony> testimonies = [
     Testimony(
@@ -29,30 +32,40 @@ class HomeController extends GetxController {
     ),
   ];
 
-  final List<PlanModel> plans = [
-    PlanModel(
+  final List<PlanHome> plans = [
+    PlanHome(
       title: "Diet Plan",
       subtitle: "Low-calorie meals designed for healthy weight.",
       price: "Rp30.000/meal",
       imagePath: "assets/images/diet.png",
       badgeImagePath: "assets/images/gold.png",
     ),
-    PlanModel(
+    PlanHome(
       title: "Royal Plan",
       subtitle: "Premium meals, maximum variety and satisfaction.",
       price: "Rp60.000/meal",
       imagePath: "assets/images/royal.png",
       badgeImagePath: "assets/images/silver.png",
     ),
-    PlanModel(
+    PlanHome(
       title: "Protein Plan",
       subtitle: "High-protein meals to support muscle growth.",
       price: "Rp40.000/meal",
       imagePath: "assets/images/protein.png",
       badgeImagePath: "assets/images/bronze.png",
     ),
-    PlanModel.empty(),
+    PlanHome.empty(),
   ];
+
+  Future<void> getAddress() async {
+    final storageService = Get.find<StorageService>();
+    final savedAddress = await storageService.getAddress();
+    if (savedAddress != null) {
+      address.value = savedAddress;
+    } else {
+      address.value = 'Set your address';
+    }
+  }
 
   void _updateCurrentIndex() {
     currentPlanIndex.value = pageController.page?.round() ?? 0;
@@ -63,6 +76,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     pageController.addListener(_updateCurrentIndex);
+    getAddress();
   }
 
   @override

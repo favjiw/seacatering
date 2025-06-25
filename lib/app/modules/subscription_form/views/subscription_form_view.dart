@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
+import '../../../data/Subscripton.dart';
 import '../../../shared/constants/colors.dart';
 import '../../../shared/constants/text_style.dart';
 import '../../../shared/widgets/custom_button.dart';
@@ -37,6 +38,44 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20.h,),
+                  Text("Full Name", style: AppTextStyle.subsLabel),
+                  SizedBox(height: 13.h),
+                  CustomTextField(
+                    width: 344.w,
+                    height: 56.h,
+                    controller: controller.nameController,
+                    hintText: "Full Name",
+                    hintStyle: AppTextStyle.hintStyle,
+                    inputStyle: AppTextStyle.inputStyle,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      return null;
+                    },
+
+                  ),
+                  SizedBox(height: 15.h,),
+                  Text("Phone Number", style: AppTextStyle.subsLabel),
+                  SizedBox(height: 13.h),
+                  CustomTextField(
+                    width: 344.w,
+                    height: 56.h,
+                    controller: controller.phoneController,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    hintText: "Your phone number",
+                    hintStyle: AppTextStyle.hintStyle,
+                    inputStyle: AppTextStyle.inputStyle,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      return null;
+                    },
+
+                  ),
+                  SizedBox(height: 30.h,),
                   Center(child: Text("Create a Plan", style: AppTextStyle.subsTitle)),
                   SizedBox(height: 15.h),
                   Center(
@@ -50,34 +89,28 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  Obx(()=>
-                      Column(
-                        children: [
-                          PlanSelectionTile(
-                            title: 'Diet Plan',
-                            price: 'Rp30.000/meal',
-                            isSelected: controller.selectedPlan.value == 'Diet',
-                            onTap: () => controller.setSelectedPlan('Diet'),
-                          ),
-                          SizedBox(height: 16.h),
-                          PlanSelectionTile(
-                            title: 'Protein Plan',
-                            price: 'Rp40.000/meal',
-                            isSelected: controller.selectedPlan.value == 'Protein',
-                            onTap: () => controller.setSelectedPlan('Protein'),
-                          ),
-                          SizedBox(height: 16.h),
-                          PlanSelectionTile(
-                            title: 'Royal Plan',
-                            price: 'Rp60.000/meal',
-                            isSelected: controller.selectedPlan.value == 'Royal',
-                            onTap: () => controller.setSelectedPlan('Royal'),
-                          ),
-                        ],
-                      ),
-                  ),
+                  Obx(() {
+                    if (controller.isLoadingMealPlans.value) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Column(
+                      children: controller.mealPlans.map((plan) {
+                        return Column(
+                          children: [
+                            PlanSelectionTile(
+                              title: plan.name,
+                              price: "Rp${plan.price}/meal",
+                              isSelected: controller.selectedPlan.value == plan.name,
+                              onTap: () => controller.setSelectedPlan(plan.name),
+                            ),
+                            SizedBox(height: 16.h),
+                          ],
+                        );
+                      }).toList(),
+                    );
+                  }),
                   SizedBox(height: 28.h),
-                  Text("Meal type", style: AppTextStyle.subsLabel),
+                  Text("Meal Type", style: AppTextStyle.subsLabel),
                   Obx(() => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -241,8 +274,28 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
            height: 58.h,
            text: "Subscribe",
            onPressed: () {
-             if (controller.validateCheckboxFields()) {
-               Get.log("valid..lanjut");
+             final isFormValid = controller.formKey.currentState?.validate() ?? false;
+             final isCheckboxValid = controller.validateCheckboxFields();
+             final selectedPlanModel = controller.mealPlans.firstWhere(
+                   (plan) => plan.name == controller.selectedPlan.value,
+             );
+             if (isFormValid && isCheckboxValid) {
+               print("Form valid dan checkbox valid. Lanjutkan proses submit...");
+               if (controller.formKey.currentState!.validate() && controller.validateCheckboxFields()) {
+                 final data = SubscriptionData(
+                   name: controller.nameController.text,
+                   phone: controller.phoneController.text,
+                   selectedPlan: selectedPlanModel.name,
+                   selectedPlanId: selectedPlanModel.uid,
+                   selectedMeals: controller.selectedMeals,
+                   selectedDeliveryDays: controller.selectedDeliveryDays,
+                   allergies: controller.allergieController.text,
+                   additionalRequest: controller.moreController.text,
+                 );
+                 Get.toNamed('/subscription-confirm', arguments: data);
+               }
+             } else {
+               print("Form atau checkbox tidak valid");
              }
            },
          ),

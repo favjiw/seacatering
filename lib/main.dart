@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:get/get.dart';
 
+import 'app/controllers/storage_service_controller.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -15,6 +16,7 @@ void main() async {
     statusBarIconBrightness: Brightness.dark,
     statusBarBrightness: Brightness.light,
   ));
+  Get.put(StorageService());
   runApp(
     MyApp()
   );

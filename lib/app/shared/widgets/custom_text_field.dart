@@ -22,6 +22,7 @@ class CustomTextField extends StatelessWidget {
 
   final TextStyle? hintStyle;
   final TextStyle? inputStyle;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     super.key,
@@ -38,6 +39,7 @@ class CustomTextField extends StatelessWidget {
     this.errorText,
     this.hintStyle,
     this.inputStyle,
+    this.keyboardType,
   });
 
   @override
@@ -46,6 +48,7 @@ class CustomTextField extends StatelessWidget {
       width: width ?? double.infinity,
       height: height,
       child: TextFormField(
+        keyboardType: keyboardType,
         controller: controller,
         obscureText: obscureText,
         validator: validator,

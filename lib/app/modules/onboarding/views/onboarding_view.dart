@@ -76,7 +76,7 @@ class OnboardingView extends GetView<OnboardingController> {
                                 backgroundColor: AppColors.primary,
                                 textStyle: AppTextStyle.whiteOnBtn,
                                 text: 'Start',
-                                onPressed: () => Get.offAllNamed('/login'),
+                                onPressed: () => controller.nextPage(),
                               ),
                             )
                             : Row(

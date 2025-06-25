@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
 
 import '../../../shared/constants/colors.dart';
@@ -44,9 +43,9 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          Obx(()=> SizedBox(
                               width: 223.w,
-                              child: Text('Moh Toha, Bandung', style: AppTextStyle.homeLoc, overflow: TextOverflow.ellipsis,)),
+                              child: Text(controller.address.value, style: AppTextStyle.homeLoc, overflow: TextOverflow.ellipsis,)),),
                         ],
                       ),
                       InkWell(
@@ -139,7 +138,6 @@ class HomeView extends GetView<HomeController> {
                     final plan = controller.plans[index];
                     // Handle empty item (index 3)
                     if (index == 3) return const SizedBox.shrink();
-                    final isActive = index == controller.currentPlanIndex.value;
                     return Obx(() {
                       final currentActive = index == controller.currentPlanIndex.value;
                       return PlanCarouselItem(

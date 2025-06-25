@@ -20,6 +20,8 @@ import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/subscription/bindings/subscription_binding.dart';
 import '../modules/subscription/views/subscription_view.dart';
+import '../modules/subscription_confirm/bindings/subscription_confirm_binding.dart';
+import '../modules/subscription_confirm/views/subscription_confirm_view.dart';
 import '../modules/subscription_form/bindings/subscription_form_binding.dart';
 import '../modules/subscription_form/views/subscription_form_view.dart';
 
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.SUBSCRIPTION_FORM,
       page: () => const SubscriptionFormView(),
       binding: SubscriptionFormBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTION_CONFIRM,
+      page: () => const SubscriptionConfirmView(),
+      binding: SubscriptionConfirmBinding(),
     ),
   ];
 }

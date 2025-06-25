@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:seacatering/app/shared/constants/colors.dart';
 
 import '../../../shared/constants/text_style.dart';
 import '../../../shared/widgets/menu_item_widget.dart';

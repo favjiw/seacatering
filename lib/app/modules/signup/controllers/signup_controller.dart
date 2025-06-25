@@ -2,8 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../controllers/storage_service_controller.dart';
 
 class SignupController extends GetxController {
+  final storageService = Get.find<StorageService>();
   final formKey = GlobalKey<FormState>();
 
   final usernameController = TextEditingController(text: "Favian");
@@ -16,6 +20,12 @@ class SignupController extends GetxController {
   var isLoading = false.obs;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> completeSign() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasSeenOnboarding', true);
+    Get.offAllNamed('/botnavbar');
+  }
 
   void toggle() {
     isObscure.value = !isObscure.value;
@@ -43,6 +53,7 @@ class SignupController extends GetxController {
       final user = userCredential.user;
 
       if (user != null) {
+        final username = usernameController.text.trim();
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'uid': user.uid,
           'username': usernameController.text.trim(),
@@ -50,8 +61,18 @@ class SignupController extends GetxController {
           'createdAt': FieldValue.serverTimestamp(),
           'role': "user"
         });
+        await storageService.saveUsername(username);
+
+        usernameController.clear();
+        emailController.clear();
+        passwordController.clear();
+        confirmPasswordController.clear();
+        isObscure.value = true;
+        isConfirmObscure.value = true;
+        isLoading.value = false;
+
         Get.snackbar("Sukses", "Akun berhasil dibuat. Cek email untuk verifikasi!");
-        Get.offAndToNamed('/home');
+        completeSign();
       }
     } on FirebaseAuthException catch (e) {
       String message = "";

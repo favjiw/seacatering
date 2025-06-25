@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/storage_service_controller.dart';
+
 class LoginController extends GetxController {
   //TODO: Implement LoginController
+  final storageService = Get.find<StorageService>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -14,8 +18,26 @@ class LoginController extends GetxController {
 
   Future<void> signIn(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.offAllNamed('/home');
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final uid = userCredential.user?.uid;
+      if (uid != null) {
+        final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        final username = doc.data()?['username'];
+        final address = doc.data()?['address'];
+        final email = doc.data()?['email'];
+        if (username != null) {
+          await storageService.saveUsername(username);
+          await storageService.saveAddress(address);
+          await storageService.saveEmail(email);
+          Get.log(username);
+          Get.log(address);
+          Get.log(email);
+        }
+      }
+      Get.offAllNamed('/botnavbar');
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
         'Login Failed',
