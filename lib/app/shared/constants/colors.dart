@@ -23,7 +23,7 @@ class AppColors {
   static final white = Colors.white;
   static final black = Colors.black;
   static final gray = HexColor('#9E9E9E');
-  static final lightGray = HexColor('#F5F5F5');
+  static final lightGray = HexColor('#C1C1C1');
   static final darkGray = HexColor('#616161');
 
   // Danger / Warning / Success

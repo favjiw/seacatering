@@ -77,113 +77,148 @@ class AppTextStyle {
     color: HexColor('#E7E7E7'),
   );
 
-  static final body = GoogleFonts.roboto(
+  static final body = GoogleFonts.poppins(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
-  static final homeLoc = GoogleFonts.roboto(
+  static final homeLoc = GoogleFonts.poppins(
     fontSize: 18.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.text,
   );
 
-  static final homeTitle = GoogleFonts.roboto(
+  static final homeTitle = GoogleFonts.poppins(
     fontSize: 18.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
-  static final profileEmail = GoogleFonts.roboto(
+  static final profileEmail = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.gray,
   );
 
-  static final protileItem = GoogleFonts.roboto(
+  static final protileItem = GoogleFonts.poppins(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     color: HexColor('#231F20'),
   );
 
-  static final protileItemTitle = GoogleFonts.roboto(
+  static final protileItemTitle = GoogleFonts.poppins(
     fontSize: 14.sp,
     fontWeight: FontWeight.w600,
     color: HexColor('#231F20'),
   );
 
-  static final planTitleActive = GoogleFonts.roboto(
+  static final planTitleActive = GoogleFonts.poppins(
     fontSize: 18.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
-  static final plansSubtitleActive = GoogleFonts.roboto(
+  static final plansSubtitleActive = GoogleFonts.poppins(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: HexColor('#676767'),
   );
-  static final planTitleInactive = GoogleFonts.roboto(
+  static final planTitleInactive = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
-  static final testimonyTitle = GoogleFonts.roboto(
+  static final testimonyTitle = GoogleFonts.poppins(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
-  static final testimonyUsername = GoogleFonts.roboto(
+  static final testimonyUsername = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
-  static final testimonyPlan = GoogleFonts.roboto(
+  static final testimonyPlan = GoogleFonts.poppins(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: HexColor('#A6A6A6'),
   );
 
-  static final appBarTitle = GoogleFonts.roboto(
+  static final appBarTitle = GoogleFonts.poppins(
     fontSize: 18.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.text,
   );
 
-  static final plansSubtitleInactive = GoogleFonts.roboto(
+  static final plansSubtitleInactive = GoogleFonts.poppins(
     fontSize: 9.sp,
     fontWeight: FontWeight.w400,
     color: HexColor('#676767'),
   );
 
-  static final bodyRegular = GoogleFonts.roboto(
+  static final subsTitle = GoogleFonts.poppins(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final subsSubTitle = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: HexColor('#5B5B5B'),
+  );
+
+  static final bodyRegular = GoogleFonts.poppins(
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
   );
 
-  static final menuTitle = GoogleFonts.roboto(
+  static final menuTitle = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.text,
   );
 
-  static final textBtn = GoogleFonts.roboto(
+  static final textBtn = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.primary,
   );
 
-  static final error = GoogleFonts.roboto(
+  static final subsSelectedPlan = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final subsUnselectedPlan = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.gray,
+  );
+
+  static final subsLabel = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+  static final subsCheck = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.text,
+  );
+
+  static final error = GoogleFonts.poppins(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.error,
   );
 
-  static final caption = GoogleFonts.openSans(
+  static final caption = GoogleFonts.poppins(
     fontSize: 12.sp,
     color: Colors.grey,
   );

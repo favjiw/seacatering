@@ -20,6 +20,8 @@ import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/subscription/bindings/subscription_binding.dart';
 import '../modules/subscription/views/subscription_view.dart';
+import '../modules/subscription_form/bindings/subscription_form_binding.dart';
+import '../modules/subscription_form/views/subscription_form_view.dart';
 
 part 'app_routes.dart';
 
@@ -78,6 +80,11 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTION_FORM,
+      page: () => const SubscriptionFormView(),
+      binding: SubscriptionFormBinding(),
     ),
   ];
 }
