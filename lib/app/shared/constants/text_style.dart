@@ -188,6 +188,16 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: AppColors.primary,
   );
+  static final titleContact = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.primary,
+  );
+  static final nameContact = GoogleFonts.poppins(
+    fontSize: 36.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
 
   static final subsSelectedPlan = GoogleFonts.poppins(
     fontSize: 16.sp,

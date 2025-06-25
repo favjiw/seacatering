@@ -12,11 +12,13 @@ class Assets {
   static const String imagesOnboardEllipse1 = 'assets/images/onboard-ellipse-1.png';
   static const String imagesOnboardEllipse2 = 'assets/images/onboard-ellipse-2.png';
   static const String imagesOnboardEllipse3 = 'assets/images/onboard-ellipse-3.png';
+  static const String imagesPhone = 'assets/images/Phone.png';
   static const String imagesProtein = 'assets/images/protein.png';
   static const String imagesRoyal = 'assets/images/royal.png';
   static const String imagesSEA = 'assets/images/SEA.png';
   static const String imagesSelectedRadioCircle = 'assets/images/selected-radio-circle.png';
   static const String imagesSilver = 'assets/images/silver.png';
   static const String imagesUnselectedRadioCircle = 'assets/images/unselected-radio-circle.png';
+  static const String imagesWhatsApp = 'assets/images/WhatsApp.png';
 
 }
