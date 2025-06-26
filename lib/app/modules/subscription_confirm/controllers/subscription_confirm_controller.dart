@@ -28,13 +28,13 @@ class SubscriptionConfirmController extends GetxController {
   void _initPayment() {
     switch (data.selectedPlan.toLowerCase()) {
       case 'diet plan':
-        mealPrice = 40000;
+        mealPrice = 30000;
         break;
       case 'royal plan':
         mealPrice = 60000;
         break;
       case 'protein plan':
-        mealPrice = 50000;
+        mealPrice = 40000;
         break;
       default:
         mealPrice = 0;
@@ -69,6 +69,7 @@ class SubscriptionConfirmController extends GetxController {
         'total_payment': totalPayment.value.round(),
       };
 
+      // Just add the document - the ID is automatically available in the reference
       await FirebaseFirestore.instance.collection('subscriptions').add(doc);
 
       Get.snackbar("Sukses", "Subscription berhasil disimpan");

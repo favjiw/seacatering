@@ -13,15 +13,13 @@ class SubscriptionFormController extends GetxController {
   TextEditingController phoneController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
-  final selectedPlan = 'Diet'.obs;
+  final selectedPlan = Rx<PlanModel?>(null);
   var selectedMeals = <String>[].obs;
   final selectedDeliveryDays = <String>[].obs;
   final RxBool isMealTypeValid = true.obs;
   final RxBool isDeliveryDayValid = true.obs;
   final mealPlans = <PlanModel>[].obs;
   final isLoadingMealPlans = true.obs;
-
-
 
   List<String> mealOptions = ['Breakfast', 'Lunch', 'Dinner'];
   final deliveryDays = <String>[
@@ -33,9 +31,15 @@ class SubscriptionFormController extends GetxController {
     try {
       isLoadingMealPlans.value = true;
       final snapshot = await FirebaseFirestore.instance.collection('meal_plans').get();
+
       mealPlans.value = snapshot.docs
           .map((doc) => PlanModel.fromMap(doc.data()))
           .toList();
+
+      // Set plan pertama sebagai default
+      if (mealPlans.isNotEmpty) {
+        selectedPlan.value = mealPlans.first;
+      }
     } catch (e) {
       Get.snackbar("Error", "Gagal memuat meal plans: $e");
     } finally {
@@ -53,14 +57,13 @@ class SubscriptionFormController extends GetxController {
     }
   }
 
-
   bool validateCheckboxFields() {
     isMealTypeValid.value = selectedMeals.isNotEmpty;
     isDeliveryDayValid.value = selectedDeliveryDays.isNotEmpty;
     return isMealTypeValid.value && isDeliveryDayValid.value;
   }
 
-  void setSelectedPlan(String plan) {
+  void setSelectedPlan(PlanModel plan) {
     selectedPlan.value = plan;
   }
 
@@ -100,6 +103,10 @@ class SubscriptionFormController extends GetxController {
 
   @override
   void onClose() {
+    nameController.dispose();
+    phoneController.dispose();
+    allergieController.dispose();
+    moreController.dispose();
     super.onClose();
   }
 }

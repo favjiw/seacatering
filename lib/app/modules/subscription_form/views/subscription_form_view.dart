@@ -62,6 +62,7 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                   CustomTextField(
                     width: 344.w,
                     height: 56.h,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
                     controller: controller.phoneController,
                     keyboardType: TextInputType.numberWithOptions(),
                     hintText: "Your phone number",
@@ -73,7 +74,6 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                       }
                       return null;
                     },
-
                   ),
                   SizedBox(height: 30.h,),
                   Center(child: Text("Create a Plan", style: AppTextStyle.subsTitle)),
@@ -100,8 +100,8 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                             PlanSelectionTile(
                               title: plan.name,
                               price: "Rp${plan.price}/meal",
-                              isSelected: controller.selectedPlan.value == plan.name,
-                              onTap: () => controller.setSelectedPlan(plan.name),
+                              isSelected: controller.selectedPlan.value?.id == plan.id,
+                              onTap: () => controller.setSelectedPlan(plan),
                             ),
                             SizedBox(height: 16.h),
                           ],
@@ -264,42 +264,42 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
             ),
           ),
         ),
-       bottomNavigationBar: Container(
-         padding: EdgeInsets.symmetric(horizontal: 49.w, vertical: 15.h),
-         width: double.infinity,
-         height: 88.h,
-         color: AppColors.white,
-         child: CustomButton(
-           width: 277.w,
-           height: 58.h,
-           text: "Subscribe",
-           onPressed: () {
-             final isFormValid = controller.formKey.currentState?.validate() ?? false;
-             final isCheckboxValid = controller.validateCheckboxFields();
-             final selectedPlanModel = controller.mealPlans.firstWhere(
-                   (plan) => plan.name == controller.selectedPlan.value,
-             );
-             if (isFormValid && isCheckboxValid) {
-               print("Form valid dan checkbox valid. Lanjutkan proses submit...");
-               if (controller.formKey.currentState!.validate() && controller.validateCheckboxFields()) {
-                 final data = SubscriptionData(
-                   name: controller.nameController.text,
-                   phone: controller.phoneController.text,
-                   selectedPlan: selectedPlanModel.name,
-                   selectedPlanId: selectedPlanModel.uid,
-                   selectedMeals: controller.selectedMeals,
-                   selectedDeliveryDays: controller.selectedDeliveryDays,
-                   allergies: controller.allergieController.text,
-                   additionalRequest: controller.moreController.text,
-                 );
-                 Get.toNamed('/subscription-confirm', arguments: data);
-               }
-             } else {
-               print("Form atau checkbox tidak valid");
-             }
-           },
-         ),
-       ),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.symmetric(horizontal: 49.w, vertical: 15.h),
+          child: CustomButton(
+            text: "Subscribe",
+            onPressed: () {
+              // Validasi form
+              final isFormValid = controller.formKey.currentState?.validate() ?? false;
+              final isCheckboxValid = controller.validateCheckboxFields();
+
+              if (!isFormValid || !isCheckboxValid) {
+                Get.snackbar("Error", "Harap lengkapi semua field");
+                return;
+              }
+
+              // Pastikan plan terpilih
+              if (controller.selectedPlan.value == null) {
+                Get.snackbar("Error", "Silakan pilih meal plan");
+                return;
+              }
+
+              // Kirim data
+              final data = SubscriptionData(
+                name: controller.nameController.text,
+                phone: controller.phoneController.text,
+                selectedPlan: controller.selectedPlan.value!.name,
+                selectedPlanId: controller.selectedPlan.value!.id,
+                selectedMeals: controller.selectedMeals.toList(),
+                selectedDeliveryDays: controller.selectedDeliveryDays.toList(),
+                allergies: controller.allergieController.text,
+                additionalRequest: controller.moreController.text,
+              );
+
+              Get.toNamed('/subscription-confirm', arguments: data);
+            },
+          ),
+        ),
       ),
     );
   }

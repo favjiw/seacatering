@@ -35,7 +35,7 @@ class MenuAvailableView extends GetView<MenuAvailableController> {
                       image: menu.imageUrl,
                       onViewMore: () {
                         // Contoh navigasi detail
-                        // Get.toNamed('/menu-detail', arguments: menu);
+                        Get.toNamed('/menu-available-detail', arguments: menu);
                       },
                     );
                   }).toList(),

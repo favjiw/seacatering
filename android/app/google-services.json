@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495496473350",
+    "project_id": "sea-catering-b20fe",
+    "storage_bucket": "sea-catering-b20fe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495496473350:android:dfc14b81e6b13aa56ccc87",
+        "android_client_info": {
+          "package_name": "com.favian.seacatering"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8JPPZuSZJqUzVqhhaaw7sq2tgHT40Rvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

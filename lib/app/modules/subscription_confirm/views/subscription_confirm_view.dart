@@ -94,7 +94,7 @@ class SubscriptionConfirmView extends GetView<SubscriptionConfirmController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Diet Plan", style: AppTextStyle.confVal,),
+                        Text("${controller.data.selectedPlan}", style: AppTextStyle.confVal,),
                         Text("${controller.formattedMeal.toString()}", style: AppTextStyle.confVal,),
                       ],
                     ),
@@ -149,6 +149,8 @@ class SubscriptionConfirmView extends GetView<SubscriptionConfirmController> {
           text: "Confirm",
           onPressed: () {
             controller.submitSubscription();
+            Get.log(controller.data.selectedPlan);
+            Get.log(controller.data.selectedPlanId);
           },
         ),
       ),

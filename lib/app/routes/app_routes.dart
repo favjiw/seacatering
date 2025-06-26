@@ -16,6 +16,7 @@ abstract class Routes {
   static const SUBSCRIPTION_FORM = _Paths.SUBSCRIPTION_FORM;
   static const SUBSCRIPTION_CONFIRM = _Paths.SUBSCRIPTION_CONFIRM;
   static const MENU_AVAILABLE = _Paths.MENU_AVAILABLE;
+  static const MENU_AVAILABLE_DETAIL = _Paths.MENU_AVAILABLE_DETAIL;
 }
 
 abstract class _Paths {
@@ -33,4 +34,5 @@ abstract class _Paths {
   static const SUBSCRIPTION_FORM = '/subscription-form';
   static const SUBSCRIPTION_CONFIRM = '/subscription-confirm';
   static const MENU_AVAILABLE = '/menu-available';
+  static const MENU_AVAILABLE_DETAIL = '/menu-available-detail';
 }

@@ -1,14 +1,14 @@
 class PlanModel {
   final String name;
   final int price;
-  final String uid;
+  final String id;
   final String imageUrl;
   final String desc;
 
   PlanModel({
     required this.name,
     required this.price,
-    required this.uid,
+    required this.id,
     required this.imageUrl,
     required this.desc,
   });
@@ -17,7 +17,7 @@ class PlanModel {
     return PlanModel(
       name: map['name'] ?? '',
       price: map['price'] ?? 0,
-      uid: map['uid'] ?? '',
+      id: map['id'] ?? '',
       imageUrl: map['image_url'] ?? '',
       desc: map['desc'] ?? '',
     );
@@ -27,7 +27,7 @@ class PlanModel {
     return {
       'name': name,
       'price': price,
-      'uid': uid,
+      'id': id,
       'image_url': imageUrl,
       'desc': desc,
     };

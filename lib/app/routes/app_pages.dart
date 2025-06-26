@@ -12,6 +12,8 @@ import '../modules/menu/bindings/menu_binding.dart';
 import '../modules/menu/views/menu_view.dart';
 import '../modules/menu_available/bindings/menu_available_binding.dart';
 import '../modules/menu_available/views/menu_available_view.dart';
+import '../modules/menu_available_detail/bindings/menu_available_detail_binding.dart';
+import '../modules/menu_available_detail/views/menu_available_detail_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.MENU_AVAILABLE,
       page: () => const MenuAvailableView(),
       binding: MenuAvailableBinding(),
+    ),
+    GetPage(
+      name: _Paths.MENU_AVAILABLE_DETAIL,
+      page: () => const MenuAvailableDetailView(),
+      binding: MenuAvailableDetailBinding(),
     ),
   ];
 }
