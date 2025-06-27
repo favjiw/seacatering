@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,42 +14,61 @@ class SubscriptionView extends GetView<SubscriptionController> {
   const SubscriptionView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.pageBackground,
-      appBar: AppBar(
-        title: Text('Subscription'),
-        titleTextStyle: AppTextStyle.appBarTitle,
-        centerTitle: true,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
         backgroundColor: AppColors.pageBackground,
+        appBar: AppBar(
+          backgroundColor: AppColors.pageBackground,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('Subscription'),
+          titleTextStyle: AppTextStyle.appBarTitle,
+          bottom: TabBar(
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            indicatorColor: Colors.black,
+            tabs: const [
+              Tab(text: 'Current'),
+              Tab(text: 'History'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.currentSubscription.value != null) {
+                return _buildCurrentSubscription();
+              } else {
+                return _buildNoSubscription();
+              }
+            }),
+            Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return _buildSubscriptionHistory();
+            }),
+          ],
+        ),
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (controller.hasSubscription.value) {
-          return _buildCurrentSubscription();
-        } else {
-          return _buildNoSubscription();
-        }
-      }),
     );
+
   }
 
   Widget _buildCurrentSubscription() {
-    final subscription = controller.currentSubscription!;
+    final subscription = controller.currentSubscription.value!;
     final status = subscription['status'] ?? 'N/A';
+
     return SingleChildScrollView(
       padding: EdgeInsets.all(20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Text(
-              'Your ${status == 'PAUSED' ? 'Paused' : 'Active'} Subscription',
-              style: AppTextStyle.homeTitle,
-            ),
-          ),
-          SizedBox(height: 20.h),
           Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -93,15 +113,12 @@ class SubscriptionView extends GetView<SubscriptionController> {
                   'End Date:',
                   controller.formatDate(subscription['end_date']),
                 ),
-
                 SizedBox(height: 15.h),
                 Text('Delivery Days:', style: AppTextStyle.confVal),
                 _buildChipList(controller.deliveryDays ?? []),
-
                 SizedBox(height: 15.h),
                 Text('Meal Types:', style: AppTextStyle.confVal),
                 _buildChipList(controller.mealTypes ?? []),
-
                 SizedBox(height: 15.h),
                 Text('Allergies:', style: AppTextStyle.confVal),
                 _buildChipList(controller.allergies ?? [], isAllergy: true),
@@ -112,6 +129,93 @@ class SubscriptionView extends GetView<SubscriptionController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSubscriptionHistory() {
+    return Obx(() {
+      if (controller.subscriptionHistory.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/empty-subscription.png',
+                width: 200.w,
+                height: 200.h,
+              ),
+              SizedBox(height: 20.h),
+              Text(
+                'No subscription history found',
+                style: AppTextStyle.confVal,
+              ),
+            ],
+          ),
+        );
+      }
+
+      final now = DateTime.now();
+
+      return ListView.builder(
+        itemCount: controller.subscriptionHistory.length,
+        itemBuilder: (context, index) {
+          final data = controller.subscriptionHistory[index];
+          final isCanceled = data['status'] == 'CANCELLED';
+          final canReactivate = isCanceled &&
+              (data['is_reactivated'] != true ||
+                  (data['reactivate_count'] ?? 0) < 3);
+
+          return Card(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _buildDetailRow('Plan:', data['plan_name'] ?? 'Unknown Plan'),
+                  if (canReactivate) ...[
+                    SizedBox(height: 15.h),
+                    CustomButton(
+                      text: 'Reactivate',
+                      onPressed: () => _confirmReactivate(data['id']),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  void _confirmReactivate(String subscriptionId) {
+    Get.defaultDialog(
+      title: 'Reactivate Subscription',
+      content: Column(
+        children: [
+          Text('This will:'),
+          Text('- Set start date to today'),
+          Text('- Set end date to 1 month from now'),
+          Text('- Reset subscription status to ACTIVE'),
+          SizedBox(height: 10),
+          Text('Are you sure?'),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text('Cancel'),
+        ),
+        Obx(
+              () => ElevatedButton(
+            onPressed: controller.isUpdating.value
+                ? null
+                : () => controller.reactivateSubscription(subscriptionId),
+            child: controller.isUpdating.value
+                ? CircularProgressIndicator()
+                : Text('Confirm Reactivate'),
+          ),
+        ),
+      ],
     );
   }
 
@@ -159,7 +263,10 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   Widget _buildActionButtons() {
-    final status = controller.currentSubscription?['status'] ?? 'N/A';
+    final subscription = controller.currentSubscription.value;
+    if (subscription == null) return SizedBox.shrink();
+
+    final status = subscription['status'] ?? 'N/A';
     return Column(
       children: [
         if (status == 'PAUSED') ...[

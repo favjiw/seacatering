@@ -54,28 +54,23 @@ class SubscriptionConfirmController extends GetxController {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) throw Exception("User not logged in");
 
-      final doc = {
+      final subscriptionDoc = data.toFirestoreMap();
+      subscriptionDoc.addAll({
         'user_id': uid,
-        'phone_number': data.phone,
-        'plan_id': data.selectedPlanId,
-        'meal_type': data.selectedMeals,
-        'delivery_days': data.selectedDeliveryDays,
-        'allergies': data.allergies,
-        'status': 'ACTIVE',
-        'end_date': Timestamp.fromDate(DateTime.now().add(Duration(days: 30))),
+        'total_payment': totalPayment.value.round(),
         'pause_periode_start': null,
         'pause_periode_end': null,
-        'created_at': FieldValue.serverTimestamp(),
-        'total_payment': totalPayment.value.round(),
-      };
+      });
 
-      // Just add the document - the ID is automatically available in the reference
-      await FirebaseFirestore.instance.collection('subscriptions').add(doc);
+      await FirebaseFirestore.instance
+          .collection('subscriptions')
+          .add(subscriptionDoc);
 
       Get.snackbar("Sukses", "Subscription berhasil disimpan");
       Get.offAllNamed('/botnavbar');
     } catch (e) {
       Get.snackbar("Error", "Gagal menyimpan subscription: $e");
+      Get.log("Error submitSubscription: $e", isError: true);
     }
   }
 

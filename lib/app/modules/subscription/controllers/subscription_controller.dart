@@ -1,14 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class SubscriptionController extends GetxController {
-  final hasSubscription = false.obs;
+  final PageController pageController = PageController();
+  final now = DateTime.now();
   final isLoading = true.obs;
   final isUpdating = false.obs;
   final isFetchingPlanName = false.obs;
-  Map<String, dynamic>? currentSubscription;
+
+  // Store all subscriptions
+  final allSubscriptions = <Map<String, dynamic>>[].obs;
+
+  // Store current active/paused subscription
+  final currentSubscription = Rx<Map<String, dynamic>?>(null);
+
+  // Store subscription history
+  final subscriptionHistory = <Map<String, dynamic>>[].obs;
+
   List<String> deliveryDays = [];
   List<String> mealTypes = [];
   List<String> allergies = [];
@@ -18,10 +29,10 @@ class SubscriptionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checkUserSubscription();
+    fetchAllSubscriptions();
   }
 
-  Future<void> checkUserSubscription() async {
+  Future<void> fetchAllSubscriptions() async {
     try {
       isLoading.value = true;
       final user = FirebaseAuth.instance.currentUser;
@@ -29,57 +40,69 @@ class SubscriptionController extends GetxController {
         final snapshot = await FirebaseFirestore.instance
             .collection('subscriptions')
             .where('user_id', isEqualTo: user.uid)
-            .where('status', whereIn: ['ACTIVE', 'PAUSED'])
-            .limit(1)
+            .orderBy('created_at', descending: true)
             .get();
 
-        if (snapshot.docs.isNotEmpty) {
-          final doc = snapshot.docs.first;
-          hasSubscription.value = true;
-          currentSubscription = doc.data();
-          subscriptionId = doc.id;
+        allSubscriptions.assignAll(snapshot.docs.map((doc) {
+          final data = doc.data();
+          data['id'] = doc.id;
+          return data;
+        }).toList());
 
-          deliveryDays = _parseFieldToList(currentSubscription?['delivery_days']);
-          mealTypes = _parseFieldToList(currentSubscription?['meal_type']);
-          allergies = _parseFieldToList(currentSubscription?['allergies']);
+        final current = allSubscriptions.firstWhere(
+              (sub) => ['ACTIVE', 'PAUSED'].contains(sub['status']),
+          orElse: () => {},
+        );
 
-          await fetchPlanName(currentSubscription?['plan_id']);
+        if (current.isNotEmpty) {
+          currentSubscription.value = current;
+          subscriptionId = current['id'];
+          planName = current['plan_name'] ?? 'Unknown Plan'; // Use stored plan_name
+
+          deliveryDays = _parseFieldToList(current['delivery_days']);
+          mealTypes = _parseFieldToList(current['meal_type']);
+          allergies = _parseFieldToList(current['allergies']);
         } else {
-          hasSubscription.value = false;
-          currentSubscription = null;
+          currentSubscription.value = null;
           subscriptionId = null;
         }
+
+        subscriptionHistory.assignAll(allSubscriptions.where(
+                (sub) => sub['status'] != current['status'] || current.isEmpty
+        ).toList());
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to check subscription: $e');
+      Get.snackbar('Error', 'Failed to fetch subscriptions: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> fetchPlanName(String? planId) async {
-    if (planId == null || planId.isEmpty) {
-      planName = 'Unknown Plan';
-      return;
-    }
-
+  Future<void> reactivateSubscription(String subscriptionId) async {
     try {
-      isFetchingPlanName.value = true;
-      final doc = await FirebaseFirestore.instance
-          .collection('meal_plans')
-          .doc(planId)
-          .get();
+      isUpdating.value = true;
+      final now = DateTime.now();
+      final newEndDate = now.add(Duration(days: 30));
 
-      if (doc.exists) {
-        planName = doc.data()?['name'] ?? 'Unknown Plan';
-      } else {
-        planName = 'Plan Not Found';
-      }
+      await FirebaseFirestore.instance
+          .collection('subscriptions')
+          .doc(subscriptionId)
+          .update({
+        'status': 'ACTIVE',
+        'start_date': Timestamp.fromDate(now),
+        'end_date': Timestamp.fromDate(newEndDate),
+        'is_reactivated': true,
+        'reactivate_count': FieldValue.increment(1),
+        'cancelled_at': null,
+        'last_reactivated_at': FieldValue.serverTimestamp(),
+      });
+
+      await fetchAllSubscriptions();
+      Get.snackbar('Success', 'Subscription has been reactivated');
     } catch (e) {
-      planName = 'Error Loading Plan';
-      Get.snackbar('Error', 'Failed to fetch plan details: $e');
+      Get.snackbar('Error', 'Failed to reactivate subscription: $e');
     } finally {
-      isFetchingPlanName.value = false;
+      isUpdating.value = false;
     }
   }
 
@@ -105,7 +128,7 @@ class SubscriptionController extends GetxController {
       });
 
       Get.log('Subscription cancelled successfully');
-      await checkUserSubscription();
+      await fetchAllSubscriptions();
       Get.back();
       Get.snackbar('Success', 'Subscription has been cancelled');
     } catch (e) {
@@ -129,7 +152,7 @@ class SubscriptionController extends GetxController {
         'pause_periode_end': Timestamp.fromDate(endDate),
       });
 
-      await checkUserSubscription();
+      await fetchAllSubscriptions();
       Get.back(); // Close dialog if open
       Get.snackbar('Success', 'Subscription has been paused');
     } catch (e) {
@@ -153,7 +176,7 @@ class SubscriptionController extends GetxController {
         'pause_periode_end': null,
       });
 
-      await checkUserSubscription();
+      await fetchAllSubscriptions();
       Get.snackbar('Success', 'Subscription has been resumed');
     } catch (e) {
       Get.snackbar('Error', 'Failed to resume subscription: $e');
