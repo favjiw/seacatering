@@ -13,7 +13,6 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  //suffix password
   var isObscure = true.obs;
 
   Future<void> signIn(String email, String password) async {
@@ -22,22 +21,38 @@ class LoginController extends GetxController {
         email: email,
         password: password,
       );
+
       final uid = userCredential.user?.uid;
       if (uid != null) {
-        final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-        final username = doc.data()?['username'];
-        final address = doc.data()?['address'];
-        final email = doc.data()?['email'];
-        if (username != null) {
-          await storageService.saveUsername(username);
-          await storageService.saveAddress(address);
-          await storageService.saveEmail(email);
-          Get.log(username);
-          Get.log(address);
-          Get.log(email);
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get();
+
+        if (doc.exists) {
+          // Get user data
+          final fullName = doc.data()?['username'] ?? '';
+          final userEmail = doc.data()?['email'] ?? '';
+          final role = doc.data()?['role'] ?? 'user'; // Default to 'user'
+
+          // Save user data using StorageService
+          await storageService.saveUsername(fullName);
+          await storageService.saveEmail(userEmail);
+          await storageService.saveRole(role); // Using the new saveRole method
+
+          Get.log('User logged in: $fullName');
+          Get.log('Role: $role');
+
+          // Navigate based on role
+          if (role == 'admin') {
+            Get.offAllNamed('/admin-dashboard');
+          } else {
+            Get.offAllNamed('/botnavbar');
+          }
+        } else {
+          throw Exception('User document not found');
         }
       }
-      Get.offAllNamed('/botnavbar');
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
         'Login Failed',
@@ -51,7 +66,7 @@ class LoginController extends GetxController {
     } catch (e) {
       Get.snackbar(
         'Error',
-        'Unexpected error occurred',
+        e.toString(),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Get.theme.colorScheme.error.withOpacity(0.8),
         colorText: Get.theme.colorScheme.onError,
@@ -80,7 +95,6 @@ class LoginController extends GetxController {
     isObscure.value = !isObscure.value;
   }
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -93,8 +107,8 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

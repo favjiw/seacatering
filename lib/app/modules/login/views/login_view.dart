@@ -80,7 +80,6 @@ class LoginView extends GetView<LoginController> {
                           return null;
                         },
                       ),),
-                      // SizedBox(height: 10.h),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(

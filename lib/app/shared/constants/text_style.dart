@@ -95,6 +95,12 @@ class AppTextStyle {
     color: AppColors.text,
   );
 
+  static final adminDate = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
   static final profileEmail = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
@@ -238,6 +244,30 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
+  );
+
+  static final adminWhtTitle = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.white,
+  );
+
+  static final adminWhtNum = GoogleFonts.poppins(
+    fontSize: 48.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.white,
+  );
+
+  static final adminBlackTitle = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.black,
+  );
+
+  static final adminBlackNum = GoogleFonts.poppins(
+    fontSize: 48.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.black,
   );
 
   static final error = GoogleFonts.poppins(

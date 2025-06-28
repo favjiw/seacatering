@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/admin_dashboard/bindings/admin_dashboard_binding.dart';
+import '../modules/admin_dashboard/views/admin_dashboard_view.dart';
 import '../modules/botnavbar/bindings/botnavbar_binding.dart';
 import '../modules/botnavbar/views/botnavbar_view.dart';
 import '../modules/contact/bindings/contact_binding.dart';
@@ -113,6 +115,11 @@ class AppPages {
       name: _Paths.TESTIMONY,
       page: () => const TestimonyView(),
       binding: TestimonyBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_DASHBOARD,
+      page: () => const AdminDashboardView(),
+      binding: AdminDashboardBinding(),
     ),
   ];
 }

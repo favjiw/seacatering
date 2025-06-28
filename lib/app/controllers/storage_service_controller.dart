@@ -36,6 +36,26 @@ class StorageService {
     return prefs.getString('email');
   }
 
+  Future<void> saveRole(String role) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('role', role);
+  }
+
+  Future<String?> getRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('role');
+  }
+
+  Future<void> savePhone(String phone) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('phone', phone);
+  }
+
+  Future<String?> getPhone() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('phone');
+  }
+
   Future<void> clearAll() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();

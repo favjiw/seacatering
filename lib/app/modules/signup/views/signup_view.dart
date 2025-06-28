@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:seacatering/app/shared/constants/colors.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
 import 'package:seacatering/app/shared/widgets/custom_button.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import '../../../shared/widgets/custom_text_field.dart';
 import '../controllers/signup_controller.dart';
@@ -20,7 +21,6 @@ class SignupView extends GetView<SignupController> {
       },
       child: Scaffold(
         backgroundColor: AppColors.white,
-        //appnar with back button
         appBar: AppBar(
           backgroundColor: AppColors.white,
           elevation: 0,
@@ -67,6 +67,7 @@ class SignupView extends GetView<SignupController> {
                       SizedBox(height: 20.h,),
                       CustomTextField(
                         hintText: 'user@gmail.com',
+                        keyboardType: TextInputType.emailAddress,
                         controller: controller.emailController,
                         inputStyle: AppTextStyle.inputStyle,
                         hintStyle: AppTextStyle.hintStyle,
@@ -77,6 +78,27 @@ class SignupView extends GetView<SignupController> {
                             return 'Please enter your email';
                           } else if (!EmailValidator.validate(value)) {
                             return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20.h,),
+                      CustomTextField(
+                        hintText: 'Your phone number',
+                        controller: controller.phoneController,
+                        keyboardType: TextInputType.phone,
+                        inputStyle: AppTextStyle.inputStyle,
+                        hintStyle: AppTextStyle.hintStyle,
+                        prefixIcon: Icon(Icons.phone_rounded, color: AppColors.primary),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your phone number';
+                          }
+                          if (value.length < 8 || value.length > 15) {
+                            return 'Enter a valid phone number (8-15 digits)';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Only numbers are allowed';
                           }
                           return null;
                         },
@@ -94,17 +116,39 @@ class SignupView extends GetView<SignupController> {
                             controller.isObscure.value
                                 ? Icons.visibility_off_rounded
                                 : Icons.visibility_rounded,
-                                color: AppColors.primary,
+                            color: AppColors.primary,
                           ),
                           onPressed: controller.toggle,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Password cannot be empty';
                           }
+
+                          if (value.length < 8) {
+                            return 'Password must be at least 8 characters';
+                          }
+
+                          // Check each requirement separately
+                          if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                            return 'Password must contain at least one uppercase letter (A-Z)';
+                          }
+
+                          if (!RegExp(r'[a-z]').hasMatch(value)) {
+                            return 'Password must contain at least one lowercase letter (a-z)';
+                          }
+
+                          if (!RegExp(r'[0-9]').hasMatch(value)) {
+                            return 'Password must contain at least one number (0-9)';
+                          }
+
+                          if (!RegExp(r'[!@#$%^&*(),.?":{}|<>\-_]').hasMatch(value)) {
+                            return 'Password must contain at least one special character (!@#\$% etc.)';
+                          }
+
                           return null;
                         },
-                      ),),
+                      )),
                       SizedBox(height: 20.h,),
                       Obx(() => CustomTextField(
                         hintText: 'Confirm password',

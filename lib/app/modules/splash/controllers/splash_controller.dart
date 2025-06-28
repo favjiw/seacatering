@@ -1,41 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/storage_service_controller.dart';
 
 class SplashController extends GetxController {
-  //TODO: Implement SplashController
-  final StorageService _storageService = StorageService();
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  final StorageService _storageService = Get.find<StorageService>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void onReady() {
     super.onReady();
     Future.delayed(const Duration(seconds: 3), () async {
       final hasSeenOnboarding = await _storageService.hasSeenOnboarding();
-      final isLoggedIn = FirebaseAuth.instance.currentUser != null;
-      Get.log(hasSeenOnboarding.toString() );
-      Get.log(isLoggedIn.toString());
+      final isLoggedIn = _auth.currentUser != null;
+
+      Get.log('Has seen onboarding: $hasSeenOnboarding');
+      Get.log('Is logged in: $isLoggedIn');
+
       if (!hasSeenOnboarding) {
         Get.offAllNamed('/onboarding');
       } else if (!isLoggedIn) {
         Get.offAllNamed('/login');
       } else {
-        Get.offAllNamed('/botnavbar');
+        await _checkUserRoleAndNavigate();
       }
-
     });
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+  Future<void> _checkUserRoleAndNavigate() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        final userDoc = await _firestore.collection('users').doc(user.uid).get();
 
-  void increment() => count.value++;
+        if (userDoc.exists) {
+          final role = userDoc.data()?['role'] ?? 'user';
+          Get.log('User role: $role');
+
+          // Save role to local storage
+          await _storageService.saveRole(role);
+
+          // Navigate based on role
+          if (role == 'admin') {
+            Get.offAllNamed('/admin-dashboard');
+          } else {
+            Get.offAllNamed('/botnavbar');
+          }
+        } else {
+          Get.offAllNamed('/login');
+        }
+      } else {
+        Get.offAllNamed('/login');
+      }
+    } catch (e) {
+      Get.log('Error checking user role: $e');
+      Get.offAllNamed('/login');
+    }
+  }
 }

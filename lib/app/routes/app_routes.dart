@@ -18,6 +18,7 @@ abstract class Routes {
   static const MENU_AVAILABLE = _Paths.MENU_AVAILABLE;
   static const MENU_AVAILABLE_DETAIL = _Paths.MENU_AVAILABLE_DETAIL;
   static const TESTIMONY = _Paths.TESTIMONY;
+  static const ADMIN_DASHBOARD = _Paths.ADMIN_DASHBOARD;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const MENU_AVAILABLE = '/menu-available';
   static const MENU_AVAILABLE_DETAIL = '/menu-available-detail';
   static const TESTIMONY = '/testimony';
+  static const ADMIN_DASHBOARD = '/admin-dashboard';
 }
