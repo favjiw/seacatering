@@ -36,7 +36,6 @@ class SubscriptionFormController extends GetxController {
           .map((doc) => PlanModel.fromMap(doc.data()))
           .toList();
 
-      // Set plan pertama sebagai default
       if (mealPlans.isNotEmpty) {
         selectedPlan.value = mealPlans.first;
       }
@@ -54,6 +53,16 @@ class SubscriptionFormController extends GetxController {
       nameController.text = savedUsername;
     } else {
       nameController.text = 'Guest';
+    }
+  }
+
+  Future<void> getPhone() async {
+    final storageService = Get.find<StorageService>();
+    final savedPhone = await storageService.getPhone();
+    if (savedPhone != null) {
+      phoneController.text = savedPhone;
+    } else {
+      phoneController.text = '0';
     }
   }
 
@@ -94,6 +103,7 @@ class SubscriptionFormController extends GetxController {
     super.onInit();
     getUsername();
     fetchMealPlans();
+    getPhone();
   }
 
   @override
