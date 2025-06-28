@@ -23,6 +23,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextStyle? inputStyle;
   final TextInputType? keyboardType;
+  final int? maxLine;
 
   const CustomTextField({
     super.key,
@@ -40,6 +41,7 @@ class CustomTextField extends StatelessWidget {
     this.hintStyle,
     this.inputStyle,
     this.keyboardType,
+    this.maxLine = 1,
   });
 
   @override
@@ -48,6 +50,7 @@ class CustomTextField extends StatelessWidget {
       width: width ?? double.infinity,
       height: height,
       child: TextFormField(
+        maxLines: maxLine,
         keyboardType: keyboardType,
         controller: controller,
         obscureText: obscureText,

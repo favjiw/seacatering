@@ -11,26 +11,26 @@ class HomeController extends GetxController {
   final RxInt currentPlanIndex = 0.obs;
   final RxString address = ''.obs;
 
-  final List<Testimony> testimonies = [
-    Testimony(
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-      userName: "Zaki",
-      planName: "Royal Plan",
-      rating: 4,
-    ),
-    Testimony(
-      content: "Very satisfied with the meal plans...",
-      userName: "Sarah",
-      planName: "Diet Plan",
-      rating: 5,
-    ),
-    Testimony(
-      content: "Good service and delicious food...",
-      userName: "John",
-      planName: "Protein Plan",
-      rating: 3,
-    ),
-  ];
+  // final List<Testimony> testimonies = [
+  //   Testimony(
+  //     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+  //     userName: "Zaki",
+  //     planName: "Royal Plan",
+  //     rating: 4,
+  //   ),
+  //   Testimony(
+  //     content: "Very satisfied with the meal plans...",
+  //     userName: "Sarah",
+  //     planName: "Diet Plan",
+  //     rating: 5,
+  //   ),
+  //   Testimony(
+  //     content: "Good service and delicious food...",
+  //     userName: "John",
+  //     planName: "Protein Plan",
+  //     rating: 3,
+  //   ),
+  // ];
 
   final List<PlanHome> plans = [
     PlanHome(

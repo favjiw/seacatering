@@ -28,6 +28,8 @@ import '../modules/subscription_confirm/bindings/subscription_confirm_binding.da
 import '../modules/subscription_confirm/views/subscription_confirm_view.dart';
 import '../modules/subscription_form/bindings/subscription_form_binding.dart';
 import '../modules/subscription_form/views/subscription_form_view.dart';
+import '../modules/testimony/bindings/testimony_binding.dart';
+import '../modules/testimony/views/testimony_view.dart';
 
 part 'app_routes.dart';
 
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.MENU_AVAILABLE_DETAIL,
       page: () => const MenuAvailableDetailView(),
       binding: MenuAvailableDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.TESTIMONY,
+      page: () => const TestimonyView(),
+      binding: TestimonyBinding(),
     ),
   ];
 }

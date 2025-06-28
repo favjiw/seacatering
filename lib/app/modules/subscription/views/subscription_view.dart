@@ -124,6 +124,22 @@ class SubscriptionView extends GetView<SubscriptionController> {
                 _buildChipList(controller.allergies ?? [], isAllergy: true),
                 SizedBox(height: 20.h),
                 _buildActionButtons(),
+                SizedBox(height: 20.h),
+                CustomButton(
+                  text: 'Review',
+                  onPressed: () {
+                    final current = controller.currentSubscription.value;
+                    if (current != null) {
+                      Get.toNamed('/testimony', arguments: {
+                        'subscriptionId': current['id'],
+                        'planId': current['plan_id'],
+                        'planName': current['plan_name'],
+                        'deliveryDays': current['delivery_days'],
+                        'mealTypes': current['meal_type'],
+                      });
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -153,9 +169,6 @@ class SubscriptionView extends GetView<SubscriptionController> {
           ),
         );
       }
-
-      final now = DateTime.now();
-
       return ListView.builder(
         itemCount: controller.subscriptionHistory.length,
         itemBuilder: (context, index) {
@@ -178,6 +191,18 @@ class SubscriptionView extends GetView<SubscriptionController> {
                       onPressed: () => _confirmReactivate(data['id']),
                     ),
                   ],
+                  CustomButton(
+                    text: 'Review',
+                    onPressed: () {
+                      Get.toNamed('/testimony', arguments: {
+                        'subscriptionId': data['id'],
+                        'planId': data['plan_id'],
+                        'planName': data['plan_name'],
+                        'deliveryDays': data['delivery_days'],
+                        'mealTypes': data['meal_type'],
+                      });
+                    },
+                  ),
                 ],
               ),
             ),

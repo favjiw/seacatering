@@ -54,7 +54,6 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                       }
                       return null;
                     },
-
                   ),
                   SizedBox(height: 15.h,),
                   Text("Phone Number", style: AppTextStyle.subsLabel),
