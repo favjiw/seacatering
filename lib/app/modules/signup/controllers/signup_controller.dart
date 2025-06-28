@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controllers/storage_service_controller.dart';
@@ -22,8 +21,6 @@ class SignupController extends GetxController {
   var isConfirmObscure = true.obs;
   var isLoading = false.obs;
 
-  PhoneNumber phoneNumber = PhoneNumber(isoCode: 'ID');
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -42,25 +39,9 @@ class SignupController extends GetxController {
   void toggle() => isObscure.value = !isObscure.value;
   void toggleConfirm() => isConfirmObscure.value = !isConfirmObscure.value;
 
-  bool validatePhone(String phone) {
-    if (phone.isEmpty) return false;
-
-    try {
-      final parsed = PhoneNumber.getRegionInfoFromPhoneNumber(phone);
-      return parsed != null;
-    } catch (e) {
-      return false;
-    }
-  }
-
-
   Future<void> signUp() async {
     if (!formKey.currentState!.validate()) return;
 
-    if (!validatePhone(phoneController.text.trim())) {
-      Get.snackbar("Error", "Please enter a valid phone number");
-      return;
-    }
 
     if (passwordController.text != confirmPasswordController.text) {
       Get.snackbar("Error", "Password and confirmation do not match");

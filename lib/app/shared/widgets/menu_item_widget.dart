@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:seacatering/app/shared/constants/colors.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MenuItemWidget extends StatelessWidget {
   final String title;
@@ -43,19 +44,27 @@ class MenuItemWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
-                    return SizedBox(
-                      width: 327.w,
-                      height: 200.h,
-                      child: Image.asset(
-                        'assets/images/protein.png',
-                        fit: BoxFit.cover,
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        width: 327.w,
+                        height: 200.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
                       ),
                     );
                   },
                   errorBuilder: (context, error, stackTrace) {
-                    return SizedBox(
+                    return Container(
                       width: 327.w,
                       height: 200.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.r),
+                        color: Colors.grey[200],
+                      ),
                       child: Image.asset(
                         'assets/images/protein.png',
                         fit: BoxFit.cover,

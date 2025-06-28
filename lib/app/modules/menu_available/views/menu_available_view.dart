@@ -34,7 +34,6 @@ class MenuAvailableView extends GetView<MenuAvailableController> {
                       price: controller.formatPrice(menu.price),
                       image: menu.imageUrl,
                       onViewMore: () {
-                        // Contoh navigasi detail
                         Get.toNamed('/menu-available-detail', arguments: menu);
                       },
                     );

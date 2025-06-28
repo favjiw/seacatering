@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:seacatering/app/shared/constants/colors.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
 import 'package:seacatering/app/shared/widgets/custom_button.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import '../../../shared/widgets/custom_text_field.dart';
 import '../controllers/signup_controller.dart';

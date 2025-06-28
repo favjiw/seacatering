@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
 
 import '../../../shared/constants/colors.dart';
@@ -84,7 +85,7 @@ class HomeView extends GetView<HomeController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Delivired to ',
+                              'Delivered to ',
                               style: AppTextStyle.heroTitleWhite,
                             ),
                             Text('You,', style: AppTextStyle.heroTitleYellow),
@@ -96,32 +97,13 @@ class HomeView extends GetView<HomeController> {
                           style: AppTextStyle.heroSubtitle,
                         ),
                         SizedBox(height: 14.h),
-                        CustomButton(
-                          width: 114.w,
-                          height: 40.h,
-                          text: 'See our menu',
-                          textStyle: AppTextStyle.heroBtn,
-                          backgroundColor: AppColors.white,
-                          borderRadius: 10.r,
-                          horizontalPad: 0,
-                          verticalPad: 0,
-                          elevation: 0,
-                          onPressed: () {
-                            // Get.toNamed('/menu');
-                          },
-                        ),
-                        SizedBox(height: 18.h),
                       ],
                     ),
                   ),
                   SizedBox(height: 14.h),
-                  Text('Your Subscription', style: AppTextStyle.homeTitle,),
+                  Text('Why us?', style: AppTextStyle.homeTitle,),
                   SizedBox(height: 10.h),
-                  Container(
-                    width: 100.w,
-                    height: 100.h,
-                    color: Colors.amber,
-                  ),
+
                   SizedBox(height: 14.h,),
                   Text('Popular Plans', style: AppTextStyle.homeTitle,),
                 ],

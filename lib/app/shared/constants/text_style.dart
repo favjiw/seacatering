@@ -189,6 +189,29 @@ class AppTextStyle {
     color: AppColors.text,
   );
 
+  static final menuDetLabel = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.primaryDark,
+  );
+
+  static final menuDetTitle = GoogleFonts.poppins(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w800,
+    color: AppColors.text,
+  );
+
+  static final menuDetSubT = GoogleFonts.poppins(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+  static final menuDetSubV = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.primaryDark,
+  );
+
   static final textBtn = GoogleFonts.poppins(
     fontSize: 15.sp,
     fontWeight: FontWeight.w600,
@@ -244,6 +267,36 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.text,
+  );
+
+  static final homeSubsTitle = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final homeSubsDate = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
+
+  static final homeSubsNoTitle = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: HexColor('#3D3D3D'),
+  );
+
+  static final homeSubsNoDate = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: HexColor('#AFAFAF'),
+  );
+
+  static final homeSubsKind = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: HexColor('#707070'),
   );
 
   static final adminWhtTitle = GoogleFonts.poppins(
