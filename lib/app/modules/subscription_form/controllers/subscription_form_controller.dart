@@ -107,6 +107,8 @@ class SubscriptionFormController extends GetxController {
     phoneController.dispose();
     allergieController.dispose();
     moreController.dispose();
+    selectedMeals.clear();
+    selectedDeliveryDays.clear();
     super.onClose();
   }
 }

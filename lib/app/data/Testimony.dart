@@ -25,7 +25,6 @@ class Testimony {
     this.isApproved = true,
   });
 
-  // Convert ke Firestore document
   Map<String, dynamic> toFirestore() {
     return {
       'user_id': userId,
@@ -40,7 +39,6 @@ class Testimony {
     };
   }
 
-  // Create dari Firestore document
   factory Testimony.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
 

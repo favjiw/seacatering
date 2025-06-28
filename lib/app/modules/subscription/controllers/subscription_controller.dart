@@ -32,6 +32,15 @@ class SubscriptionController extends GetxController {
     fetchAllSubscriptions();
   }
 
+  @override
+  void onClose() {
+    pageController.dispose();
+    allSubscriptions.clear();
+    subscriptionHistory.clear();
+    super.onClose();
+  }
+
+
   Future<void> fetchAllSubscriptions() async {
     try {
       isLoading.value = true;

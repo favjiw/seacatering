@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,32 +6,58 @@ import '../../../controllers/storage_service_controller.dart';
 import '../../../data/PlanHome.dart';
 import '../../../data/PlanModel.dart';
 import '../../../data/Testimony.dart';
+import '../../../data/TestimonyHome.dart';
 
 class HomeController extends GetxController {
   final PageController pageController = PageController(viewportFraction: 0.64);
   final RxInt currentPlanIndex = 0.obs;
   final RxString address = ''.obs;
+  // final RxList<HomeTestimony> testimonies = <HomeTestimony>[].obs;
+  final isLoadingTestimonies = false.obs;
 
-  // final List<Testimony> testimonies = [
-  //   Testimony(
-  //     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-  //     userName: "Zaki",
-  //     planName: "Royal Plan",
-  //     rating: 4,
-  //   ),
-  //   Testimony(
-  //     content: "Very satisfied with the meal plans...",
-  //     userName: "Sarah",
-  //     planName: "Diet Plan",
-  //     rating: 5,
-  //   ),
-  //   Testimony(
-  //     content: "Good service and delicious food...",
-  //     userName: "John",
-  //     planName: "Protein Plan",
-  //     rating: 3,
-  //   ),
-  // ];
+  late final Stream<QuerySnapshot> _testimoniesStream;
+  final RxList<HomeTestimony> testimonies = <HomeTestimony>[].obs;
+
+  Future<void> fetchTestimonies() async {
+    try {
+      isLoadingTestimonies.value = true;
+      testimonies.clear();
+
+      final snapshot = await FirebaseFirestore.instance
+          .collection('testimonies')
+          .where('is_approved', isEqualTo: true)
+          .orderBy('created_at', descending: true)
+          .limit(10)
+          .get();
+
+      testimonies.assignAll(snapshot.docs.map((doc) {
+        final testimony = Testimony.fromFirestore(doc);
+        return HomeTestimony.fromFirestoreTestimony(testimony);
+      }));
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load testimonials');
+    } finally {
+      isLoadingTestimonies.value = false;
+    }
+  }
+
+  void _setupTestimoniesStream() {
+    _testimoniesStream = FirebaseFirestore.instance
+        .collection('testimonies')
+        .where('is_approved', isEqualTo: true)
+        .orderBy('created_at', descending: true)
+        .limit(10)
+        .snapshots();
+
+    _testimoniesStream.listen((QuerySnapshot snapshot) {
+      testimonies.assignAll(snapshot.docs.map((doc) {
+        final testimony = Testimony.fromFirestore(doc);
+        return HomeTestimony.fromFirestoreTestimony(testimony);
+      }));
+    }, onError: (error) {
+      Get.snackbar('Error', 'Failed to load testimonials');
+    });
+  }
 
   final List<PlanHome> plans = [
     PlanHome(
@@ -77,6 +104,8 @@ class HomeController extends GetxController {
     super.onInit();
     pageController.addListener(_updateCurrentIndex);
     getAddress();
+    // fetchTestimonies();
+    _setupTestimoniesStream();
   }
 
   @override

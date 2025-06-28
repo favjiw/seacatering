@@ -164,27 +164,41 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             SizedBox(height: 14.h,),
-            // SizedBox(
-            //   height: 210.h, // Sesuaikan tinggi
-            //   child: ListView.builder(
-            //     scrollDirection: Axis.horizontal,
-            //     itemCount: controller.testimonies.length,
-            //     shrinkWrap: true,
-            //     itemBuilder: (context, index) {
-            //       final testimony = controller.testimonies[index];
-            //       return Padding(
-            //         padding: EdgeInsets.only(right: 16.w, left: 27.w),
-            //         child: TestimonialCard(
-            //           content: testimony.content,
-            //           userName: testimony.userName,
-            //           planName: testimony.planName,
-            //           rating: testimony.rating,
-            //           avatarUrl: testimony.avatarUrl,
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
+            Obx(() {
+              if (controller.isLoadingTestimonies.value) {
+                return SizedBox(
+                  height: 210.h,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (controller.testimonies.isEmpty) {
+                return SizedBox(
+                  height: 210.h,
+                  child: Center(child: Text('No testimonials available')),
+                );
+              }
+              return SizedBox(
+                height: 210.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.testimonies.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final testimony = controller.testimonies[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 16.w, left: index == 0 ? 27.w : 0),
+                      child: TestimonialCard(
+                        content: testimony.content,
+                        userName: testimony.userName,
+                        planName: testimony.planName,
+                        rating: testimony.rating.toInt(),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }),
             SizedBox(height: 100.h,),
           ],
         ),
