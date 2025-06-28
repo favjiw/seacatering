@@ -11,13 +11,8 @@ class SubscriptionController extends GetxController {
   final isUpdating = false.obs;
   final isFetchingPlanName = false.obs;
 
-  // Store all subscriptions
   final allSubscriptions = <Map<String, dynamic>>[].obs;
-
-  // Store current active/paused subscription
   final currentSubscription = Rx<Map<String, dynamic>?>(null);
-
-  // Store subscription history
   final subscriptionHistory = <Map<String, dynamic>>[].obs;
 
   List<String> deliveryDays = [];
@@ -40,6 +35,17 @@ class SubscriptionController extends GetxController {
     super.onClose();
   }
 
+  DateTime get subscriptionStartDate {
+    return currentSubscription.value?['created_at']?.toDate() ?? DateTime.now();
+  }
+
+  DateTime get subscriptionEndDate {
+    return currentSubscription.value?['end_date']?.toDate() ?? DateTime.now().add(Duration(days: 30));
+  }
+
+  bool isDateSelectable(DateTime date) {
+    return date.isAfter(subscriptionStartDate) && date.isBefore(subscriptionEndDate);
+  }
 
   Future<void> fetchAllSubscriptions() async {
     try {
@@ -172,10 +178,14 @@ class SubscriptionController extends GetxController {
   }
 
   Future<void> resumeSubscription() async {
-    if (subscriptionId == null) return;
+    debugPrint('[CONTROLLER] Starting resumeSubscription');
+    if (subscriptionId == null) {
+      debugPrint('[CONTROLLER] Error: subscriptionId is null');
+      return;
+    }
 
     try {
-      isUpdating.value = true;
+      debugPrint('[CONTROLLER] Updating Firestore document');
       await FirebaseFirestore.instance
           .collection('subscriptions')
           .doc(subscriptionId)
@@ -185,12 +195,15 @@ class SubscriptionController extends GetxController {
         'pause_periode_end': null,
       });
 
+      debugPrint('[CONTROLLER] Firestore update successful, fetching subscriptions');
       await fetchAllSubscriptions();
+      debugPrint('[CONTROLLER] fetchAllSubscriptions completed');
+
       Get.snackbar('Success', 'Subscription has been resumed');
     } catch (e) {
+      debugPrint('[CONTROLLER ERROR] Failed to resume: $e');
       Get.snackbar('Error', 'Failed to resume subscription: $e');
-    } finally {
-      isUpdating.value = false;
+      rethrow;
     }
   }
 

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:seacatering/app/shared/constants/text_style.dart';
 
 import '../../../shared/constants/colors.dart';
-import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/plan_carousel_item.dart';
 import '../../../shared/widgets/testimony_card.dart';
 import '../controllers/home_controller.dart';
@@ -52,8 +50,9 @@ class HomeView extends GetView<HomeController> {
                       InkWell(
                         onTap: () => Get.toNamed('/profile'),
                         child: CircleAvatar(
-                          backgroundColor: AppColors.gray,
+                          backgroundColor: AppColors.primary,
                           radius: 25.r,
+                          child: Icon(Icons.person_rounded, color: AppColors.white, size: 30.r,),
                         ),
                       ),
                     ],
@@ -100,16 +99,27 @@ class HomeView extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 14.h),
-                  Text('Why us?', style: AppTextStyle.homeTitle,),
-                  SizedBox(height: 10.h),
-
                   SizedBox(height: 14.h,),
                   Text('Popular Plans', style: AppTextStyle.homeTitle,),
                 ],
               ),
             ),
-            SizedBox(
+            Obx(() {
+              if (controller.isLoadingPlans.value) {
+                return SizedBox(
+                  height: 255.h,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (controller.plans.isEmpty) {
+                return SizedBox(
+                  height: 255.h,
+                  child: Center(child: Text('No plans available')),
+                );
+              }
+
+              return SizedBox(
                 height: 255.h,
                 child: PageView.builder(
                   controller: controller.pageController,
@@ -118,22 +128,17 @@ class HomeView extends GetView<HomeController> {
                   padEnds: false,
                   itemBuilder: (context, index) {
                     final plan = controller.plans[index];
-                    // Handle empty item (index 3)
-                    if (index == 3) return const SizedBox.shrink();
                     return Obx(() {
                       final currentActive = index == controller.currentPlanIndex.value;
                       return PlanCarouselItem(
-                            isActive: currentActive,
-                            title: plan.title,
-                            subtitle: plan.subtitle,
-                            price: plan.price,
-                            imagePath: plan.imagePath,
-                            badgeImagePath: plan.badgeImagePath,
+                        isActive: currentActive,
+                        plan: plan,
                       );
                     });
                   },
                 ),
-              ),
+              );
+            }),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 27.w),
               child: Row(

@@ -55,7 +55,6 @@ class TestimonialCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 15.h),
-          // Konten testimoni
           SizedBox(
             height: 85.h,
             child: SingleChildScrollView(
@@ -84,14 +83,8 @@ class TestimonialCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.gray,
                   borderRadius: BorderRadius.circular(100.r),
-                  image:
-                      avatarUrl != null
-                          ? DecorationImage(
-                            image: NetworkImage(avatarUrl!),
-                            fit: BoxFit.cover,
-                          )
-                          : null,
                 ),
+                child: Icon(Icons.person_rounded, color: AppColors.white, size: 30.r),
               ),
               SizedBox(width: 10.w),
               Column(

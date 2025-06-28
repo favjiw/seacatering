@@ -60,4 +60,19 @@ class PlanModel {
       'fiber': fiber,
     };
   }
+
+  // factory PlanModel.empty() => PlanModel(
+  //   id: '',
+  //   name: '',
+  //   price: 0,
+  //   imageUrl: '',
+  //   imageCircleUrl: '',
+  //   shortDesc: '',
+  //   desc: '',
+  //   calories: 0,
+  //   protein: 0,
+  //   carbs: 0,
+  //   fat: 0,
+  //   fiber: 0,
+  // );
 }

@@ -22,12 +22,12 @@ class SubscriptionView extends GetView<SubscriptionController> {
           backgroundColor: AppColors.pageBackground,
           elevation: 0,
           centerTitle: true,
-          title: const Text('Subscription'),
+          title: Text('Subscription'),
           titleTextStyle: AppTextStyle.appBarTitle,
           bottom: TabBar(
             labelColor: Colors.black,
             unselectedLabelColor: Colors.grey,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            labelStyle: AppTextStyle.menuDetSubT,
             indicatorColor: Colors.black,
             tabs: const [
               Tab(text: 'Current'),
@@ -178,69 +178,114 @@ class SubscriptionView extends GetView<SubscriptionController> {
               (data['is_reactivated'] != true ||
                   (data['reactivate_count'] ?? 0) < 3);
 
-          return Card(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  _buildDetailRow('Plan:', data['plan_name'] ?? 'Unknown Plan'),
-                  if (canReactivate) ...[
-                    SizedBox(height: 15.h),
-                    CustomButton(
-                      text: 'Reactivate',
-                      onPressed: () => _confirmReactivate(data['id']),
-                    ),
-                  ],
-                  CustomButton(
-                    text: 'Review',
-                    onPressed: () {
-                      Get.toNamed('/testimony', arguments: {
-                        'subscriptionId': data['id'],
-                        'planId': data['plan_id'],
-                        'planName': data['plan_name'],
-                        'deliveryDays': data['delivery_days'],
-                        'mealTypes': data['meal_type'],
-                      });
-                    },
-                  ),
-                ],
+          return Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              width: 333.w,
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(20.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),],
               ),
-            ),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100.r),
+                          child: SizedBox(),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data['status'] ?? 'Unknown Status',
+                              style: AppTextStyle.confVal,
+                            ),
+                            //name
+                            Text(
+                              data['plan_name'] ?? 'Unknown Plan',
+                              style: AppTextStyle.confVal,
+                            ),
+                            Text(
+                              '${controller.formatDate(data['created_at'])}',
+                              style: AppTextStyle.confVal,
+                            ),
+                            //end date
+                            Text(
+                              '${controller.formatDate(data['end_date'])}',
+                              style: AppTextStyle.confVal,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.h,),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${controller.formatCurrency(data['total_payment'])}',
+                            style: AppTextStyle.confVal,
+                          ),
+                          SizedBox(height: 10.h,),
+                          CustomButton(
+                            text: 'Reactivate',
+                            onPressed: isCanceled ? () => _confirmReactivate(data['id']) : null,
+                          ),
+                          SizedBox(height: 10.h,),
+                          CustomButton(
+                            text: 'Review',
+                            onPressed: () {
+                              Get.toNamed('/testimony', arguments: {
+                                'subscriptionId': data['id'],
+                                'planId': data['plan_id'],
+                                'planName': data['plan_name'],
+                                'deliveryDays': data['delivery_days'],
+                                'mealTypes': data['meal_type'],
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ])
           );
         },
       );
     });
   }
 
-  void _confirmReactivate(String subscriptionId) {
-    Get.defaultDialog(
-      title: 'Reactivate Subscription',
-      content: Column(
+  Widget _buildNoSubscription() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('This will:'),
-          Text('- Set start date to today'),
-          Text('- Set end date to 1 month from now'),
-          Text('- Reset subscription status to ACTIVE'),
-          SizedBox(height: 10),
-          Text('Are you sure?'),
+          Image.asset(
+            'assets/images/empty-subscription.png',
+            width: 244.w,
+            height: 238.h,
+            fit: BoxFit.fill,
+          ),
+          SizedBox(height: 28.h,),
+          Text('You currently don\'t have any\nactive subscription', textAlign: TextAlign.center, style: AppTextStyle.confVal,),
+          SizedBox(height: 28.h,),
+          CustomButton(
+              width: 277.w,
+              height: 58.h,
+              text: "Add Subscription", onPressed: () => Get.toNamed('/subscription-form'))
         ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Get.back(),
-          child: Text('Cancel'),
-        ),
-        Obx(
-              () => ElevatedButton(
-            onPressed: controller.isUpdating.value
-                ? null
-                : () => controller.reactivateSubscription(subscriptionId),
-            child: controller.isUpdating.value
-                ? CircularProgressIndicator()
-                : Text('Confirm Reactivate'),
-          ),
-        ),
-      ],
     );
   }
 
@@ -312,33 +357,78 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   Widget _buildPauseButton() {
-    return ElevatedButton(
+    return CustomButton(
+      text: 'Pause',
       onPressed: () => _confirmPauseSubscription(),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
-      ),
-      child: Text('Pause', style: AppTextStyle.whiteOnBtn),
+      backgroundColor: Colors.orange,
+      textStyle: AppTextStyle.whiteOnBtn,
     );
   }
 
   Widget _buildCancelButton() {
-    return ElevatedButton(
+    return CustomButton(
+      text: 'Cancel',
       onPressed: () => _confirmCancelSubscription(),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+      backgroundColor: Colors.red,
+      textStyle: AppTextStyle.whiteOnBtn,
+    );
+  }
+
+  Widget _buildResumeButton() {
+    return CustomButton(
+      text: 'Activate',
+      onPressed: () => _confirmResumeSubscription(),
+      backgroundColor: Colors.green,
+      textStyle: AppTextStyle.whiteOnBtn,
+    );
+  }
+
+  void _confirmReactivate(String subscriptionId) {
+    Get.defaultDialog(
+      title: 'Reactivate Subscription',
+      content: Column(
+        children: [
+          Text('This will:'),
+          Text('- Set start date to today'),
+          Text('- Set end date to 1 month from now'),
+          Text('- Reset subscription status to ACTIVE'),
+          SizedBox(height: 10),
+          Text('Are you sure?'),
+        ],
       ),
-      child: Text('Cancel', style: AppTextStyle.whiteOnBtn),
+      actions: [
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text('Cancel'),
+        ),
+        Obx(
+              () => ElevatedButton(
+            onPressed: controller.isUpdating.value
+                ? null
+                : () => controller.reactivateSubscription(subscriptionId),
+            child: controller.isUpdating.value
+                ? CircularProgressIndicator()
+                : Text('Confirm Reactivate'),
+          ),
+        ),
+      ],
     );
   }
 
   void _confirmCancelSubscription() {
+    final controller = Get.find<SubscriptionController>();
+
     Get.defaultDialog(
       title: 'Cancel Subscription',
+      titleStyle: AppTextStyle.adminBlackTitle,
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Are you sure you want to cancel your subscription?'),
+          Text(
+            'Are you sure you want to cancel your subscription?',
+            style: AppTextStyle.body,
+            textAlign: TextAlign.center,
+          ),
           SizedBox(height: 10.h),
           Text(
             'This action cannot be undone.',
@@ -347,14 +437,23 @@ class SubscriptionView extends GetView<SubscriptionController> {
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text('No')),
+        TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('No')
+        ),
         Obx(
               () => ElevatedButton(
             onPressed: controller.isUpdating.value
                 ? null
                 : () async {
-              Get.log("Cancel button pressed");
-              await controller.cancelSubscription();
+              try {
+                controller.isUpdating.value = true;
+                Get.log("Cancel button pressed");
+                await controller.cancelSubscription();
+              } finally {
+                Get.back(closeOverlays: true);
+                controller.isUpdating.value = false;
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
@@ -370,98 +469,146 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   void _confirmPauseSubscription() {
-    final startDate = DateTime.now();
-    final endDate = startDate.add(const Duration(days: 7));
+    final controller = Get.find<SubscriptionController>();
+    DateTime startDate = DateTime.now();
+    if (startDate.isBefore(controller.subscriptionStartDate)) {
+      startDate = controller.subscriptionStartDate;
+    } else if (startDate.isAfter(controller.subscriptionEndDate)) {
+      startDate = controller.subscriptionEndDate.subtract(const Duration(days: 1));
+    }
+
+    DateTime endDate = startDate.add(const Duration(days: 7));
+    if (endDate.isAfter(controller.subscriptionEndDate)) {
+      endDate = controller.subscriptionEndDate;
+    }
 
     Get.dialog(
-      AlertDialog(
-        title: const Text('Pause Subscription'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Select pause period:'),
-            const SizedBox(height: 20),
-            ListTile(
-              title: const Text('From'),
-              subtitle: Text(DateFormat('dd MMM yyyy').format(startDate)),
+      StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text('Pause Subscription', textAlign: TextAlign.center,),
+            titleTextStyle: AppTextStyle.adminBlackTitle,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Select pause period:', style: AppTextStyle.body),
+                SizedBox(height: 20.h),
+                ListTile(
+                  title: Text('From', style: AppTextStyle.body),
+                  subtitle: Text(DateFormat('dd MMM yyyy').format(startDate), style: AppTextStyle.confLabel),
+                  trailing: IconButton(
+                    icon: Icon(Icons.calendar_today_rounded),
+                    onPressed: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: startDate,
+                        firstDate: controller.subscriptionStartDate,
+                        lastDate: controller.subscriptionEndDate,
+                        selectableDayPredicate: (date) =>
+                        date.isAfter(controller.subscriptionStartDate.subtract(const Duration(days: 1))) &&
+                            date.isBefore(controller.subscriptionEndDate),
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          startDate = picked;
+                          if (endDate.isBefore(startDate) || endDate.isAtSameMomentAs(startDate)) {
+                            endDate = startDate.add(const Duration(days: 1));
+                          }
+                          if (endDate.isAfter(controller.subscriptionEndDate)) {
+                            endDate = controller.subscriptionEndDate;
+                          }
+                        });
+                      }
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: Text('To'),
+                  titleTextStyle: AppTextStyle.adminBlackTitle,
+                  subtitle: Text(DateFormat('dd MMM yyyy').format(endDate)),
+                  subtitleTextStyle: AppTextStyle.confLabel,
+                  trailing: IconButton(
+                    icon: Icon(Icons.calendar_today_rounded),
+                    onPressed: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: endDate,
+                        firstDate: startDate.add(const Duration(days: 1)),
+                        lastDate: controller.subscriptionEndDate,
+                        selectableDayPredicate: (date) =>
+                        date.isAfter(startDate) &&
+                            date.isBefore(controller.subscriptionEndDate.add(const Duration(days: 1))),
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          endDate = picked;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
-            ListTile(
-              title: const Text('To'),
-              subtitle: Text(DateFormat('dd MMM yyyy').format(endDate)),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          Obx(
-                () => ElevatedButton(
-              onPressed: controller.isUpdating.value
-                  ? null
-                  : () => controller.pauseSubscription(startDate, endDate),
-              child: controller.isUpdating.value
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text('Confirm Pause'),
-            ),
-          ),
-        ],
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: const Text('Cancel'),
+              ),
+              Obx(
+                    () => ElevatedButton(
+                  onPressed: controller.isUpdating.value
+                      ? null
+                      : () => controller.pauseSubscription(startDate, endDate),
+                  child: controller.isUpdating.value
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('Confirm Pause'),
+                ),
+              ),
+            ],
+          );
+        },
       ),
-    );
-  }
-
-  Widget _buildResumeButton() {
-    return ElevatedButton(
-      onPressed: () => _confirmResumeSubscription(),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-      ),
-      child: Text('Activate', style: AppTextStyle.whiteOnBtn,),
     );
   }
 
   void _confirmResumeSubscription() {
+    final controller = Get.find<SubscriptionController>();
     Get.defaultDialog(
       title: 'Resume Subscription',
-      content: const Text('Are you sure you want to resume your subscription?'),
+      titleStyle: AppTextStyle.adminBlackTitle,
+      content: Center(
+        child: Text(
+          'Are you sure you want to resume your subscription? (There will be no charge)',
+          style: AppTextStyle.body,
+          textAlign: TextAlign.center,
+        ),
+      ),
       actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text('No')),
+        TextButton(
+          onPressed: () => Get.back(),
+          child: const Text('No'),
+        ),
         Obx(
-          () => ElevatedButton(
-            onPressed:
-                controller.isUpdating.value
-                    ? null
-                    : () => controller.resumeSubscription(),
-            child:
-                controller.isUpdating.value
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Yes, Resume'),
+              () => ElevatedButton(
+            onPressed: controller.isUpdating.value
+                ? null
+                : () async {
+              try {
+                controller.isUpdating.value = true;
+                await controller.resumeSubscription();
+              } catch (e) {
+                debugPrint('[ERROR] In resumeSubscription: $e');
+              } finally {
+                Get.back(closeOverlays: true);
+                controller.isUpdating.value = false;
+              }
+            },
+            child: controller.isUpdating.value
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text('Yes, Resume'),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildNoSubscription() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/empty-subscription.png',
-            width: 244.w,
-            height: 238.h,
-            fit: BoxFit.fill,
-          ),
-          SizedBox(height: 28.h,),
-          Text('You currently don\'t have any\nactive subscription', textAlign: TextAlign.center, style: AppTextStyle.confVal,),
-          SizedBox(height: 28.h,),
-          CustomButton(
-              width: 277.w,
-              height: 58.h,
-              text: "Add Subscription", onPressed: () => Get.toNamed('/subscription-form'))
-        ],
-      ),
     );
   }
 }

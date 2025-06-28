@@ -9,14 +9,31 @@ import '../../../data/Testimony.dart';
 import '../../../data/TestimonyHome.dart';
 
 class HomeController extends GetxController {
-  final PageController pageController = PageController(viewportFraction: 0.64);
+  final PageController pageController = PageController(viewportFraction: 0.7);
   final RxInt currentPlanIndex = 0.obs;
   final RxString address = ''.obs;
-  // final RxList<HomeTestimony> testimonies = <HomeTestimony>[].obs;
+  final RxList<HomeTestimony> testimonies = <HomeTestimony>[].obs;
+  final RxList<PlanModel> plans = <PlanModel>[].obs;
   final isLoadingTestimonies = false.obs;
+  final isLoadingPlans = false.obs;
 
   late final Stream<QuerySnapshot> _testimoniesStream;
-  final RxList<HomeTestimony> testimonies = <HomeTestimony>[].obs;
+
+  Future<void> fetchPlans() async {
+    try {
+      isLoadingPlans.value = true;
+      final snapshot = await FirebaseFirestore.instance
+          .collection('meal_plans')
+          .orderBy('price')
+          .get();
+
+      plans.assignAll(snapshot.docs.map((doc) => PlanModel.fromMap(doc.data())));
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load plans');
+    } finally {
+      isLoadingPlans.value = false;
+    }
+  }
 
   Future<void> fetchTestimonies() async {
     try {
@@ -59,30 +76,6 @@ class HomeController extends GetxController {
     });
   }
 
-  final List<PlanHome> plans = [
-    PlanHome(
-      title: "Diet Plan",
-      subtitle: "Low-calorie meals designed for healthy weight.",
-      price: "Rp30.000/meal",
-      imagePath: "assets/images/diet.png",
-      badgeImagePath: "assets/images/gold.png",
-    ),
-    PlanHome(
-      title: "Royal Plan",
-      subtitle: "Premium meals, maximum variety and satisfaction.",
-      price: "Rp60.000/meal",
-      imagePath: "assets/images/royal.png",
-      badgeImagePath: "assets/images/silver.png",
-    ),
-    PlanHome(
-      title: "Protein Plan",
-      subtitle: "High-protein meals to support muscle growth.",
-      price: "Rp40.000/meal",
-      imagePath: "assets/images/protein.png",
-      badgeImagePath: "assets/images/bronze.png",
-    ),
-    PlanHome.empty(),
-  ];
 
   Future<void> getAddress() async {
     final storageService = Get.find<StorageService>();
@@ -98,13 +91,13 @@ class HomeController extends GetxController {
     currentPlanIndex.value = pageController.page?.round() ?? 0;
   }
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
     pageController.addListener(_updateCurrentIndex);
     getAddress();
     // fetchTestimonies();
+    fetchPlans();
     _setupTestimoniesStream();
   }
 
@@ -119,6 +112,4 @@ class HomeController extends GetxController {
     pageController.dispose();
     super.onClose();
   }
-
-  void increment() => count.value++;
 }
