@@ -6,18 +6,16 @@ import '../../../controllers/storage_service_controller.dart';
 import '../../../data/Testimony.dart';
 
 class TestimonyController extends GetxController {
-  // Form Management
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final messageController = TextEditingController();
-  final RxDouble rating = 1.0.obs;
+  final RxInt rating = 1.obs;
   final isLoading = false.obs;
   final RxString username = ''.obs;
 
-  // Subscription data
   late final String subscriptionId;
   late final String planId;
-  late final String planName; // Now non-nullable
+  late final String planName;
 
   @override
   void onInit() {
@@ -30,7 +28,7 @@ class TestimonyController extends GetxController {
     final args = Get.arguments as Map<String, dynamic>? ?? {};
     subscriptionId = args['subscriptionId']?.toString() ?? '';
     planId = args['planId']?.toString() ?? '';
-    planName = args['planName']?.toString() ?? 'Unknown Plan'; // Default value
+    planName = args['planName']?.toString() ?? 'Unknown Plan';
 
     if (subscriptionId.isEmpty || planId.isEmpty) {
       Get.back();
@@ -74,7 +72,7 @@ class TestimonyController extends GetxController {
         userName: nameController.text.trim(),
         subscriptionId: subscriptionId,
         planId: planId,
-        planName: planName, // Use the passed value directly
+        planName: planName,
         rating: rating.value,
         message: messageController.text.trim(),
         createdAt: DateTime.now(),

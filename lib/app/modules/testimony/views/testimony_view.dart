@@ -78,17 +78,23 @@ class TestimonyView extends GetView<TestimonyController> {
                   Center(
                     child: Obx(
                           () => RatingBar.builder(
-                        initialRating: controller.rating.value, // Tambahkan .value di sini
+                        initialRating: controller.rating.value.toDouble(),
                         minRating: 1,
                         direction: Axis.horizontal,
-                        allowHalfRating: true,
+                        allowHalfRating: false,
                         itemCount: 5,
                         itemSize: 40,
-                        itemBuilder: (context, _) => Icon(Icons.star_rounded, color: Colors.amber),
-                        onRatingUpdate: (rating) => controller.rating.value = rating, // Tetap gunakan .value
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star_rounded,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          controller.rating.value = rating.toInt();
+                        },
                       ),
-                    )
-                  ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -99,7 +105,6 @@ class TestimonyView extends GetView<TestimonyController> {
           child: CustomButton(
             text: "Send a Testimony",
             onPressed: () {
-              // Validasi form
               final isFormValid = controller.formKey.currentState?.validate() ?? false;
               if (!isFormValid) {
                 Get.snackbar("Error", "Harap lengkapi semua field");

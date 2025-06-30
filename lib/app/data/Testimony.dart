@@ -7,7 +7,7 @@ class Testimony {
   final String subscriptionId;
   final String planId;
   final String planName;
-  final double rating;
+  final int rating;
   final String message;
   final DateTime createdAt;
   final bool isApproved;
@@ -49,7 +49,7 @@ class Testimony {
       subscriptionId: data['subscription_id']?.toString() ?? '',
       planId: data['plan_id']?.toString() ?? '',
       planName: data['plan_name']?.toString() ?? 'Unknown Plan',
-      rating: (data['rating'] as num?)?.toDouble() ?? 0.0,
+      rating: (data['rating'] as num?)?.toInt() ?? 0,
       message: data['message']?.toString() ?? '',
       createdAt: (data['created_at'] as Timestamp?)?.toDate() ?? DateTime.now(),
       isApproved: data['is_approved'] as bool? ?? false,

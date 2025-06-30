@@ -4,7 +4,7 @@ class HomeTestimony {
   final String content;
   final String userName;
   final String planName;
-  final double rating;
+  final int rating;
 
   HomeTestimony({
     required this.content,
