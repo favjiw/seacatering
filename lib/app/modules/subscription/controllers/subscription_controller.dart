@@ -185,7 +185,7 @@ class SubscriptionController extends GetxController {
       });
 
       await fetchAllSubscriptions();
-      Get.back(); // Close dialog if open
+      Get.back();
       Get.snackbar('Success', 'Subscription has been paused');
     } catch (e) {
       Get.snackbar('Error', 'Failed to pause subscription: $e');

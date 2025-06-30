@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SubscriptionData {
+  final String id;
   final String name;
   final String phone;
   final String selectedPlan;
@@ -15,6 +16,7 @@ class SubscriptionData {
   final DateTime? endDate;
 
   SubscriptionData({
+    required this.id,
     required this.name,
     required this.phone,
     required this.selectedPlan,
@@ -32,6 +34,7 @@ class SubscriptionData {
   Map<String, dynamic> toFirestoreMap() {
     final now = DateTime.now();
     return {
+      'id': id,
       'user_name': name,
       'phone_number': phone,
       'plan_name': selectedPlan,

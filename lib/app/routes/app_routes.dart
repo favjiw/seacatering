@@ -19,6 +19,8 @@ abstract class Routes {
   static const MENU_AVAILABLE_DETAIL = _Paths.MENU_AVAILABLE_DETAIL;
   static const TESTIMONY = _Paths.TESTIMONY;
   static const ADMIN_DASHBOARD = _Paths.ADMIN_DASHBOARD;
+  static const REACTIVATE_FORM = _Paths.REACTIVATE_FORM;
+  static const REACTIVATE_CONFIRM = _Paths.REACTIVATE_CONFIRM;
 }
 
 abstract class _Paths {
@@ -39,4 +41,6 @@ abstract class _Paths {
   static const MENU_AVAILABLE_DETAIL = '/menu-available-detail';
   static const TESTIMONY = '/testimony';
   static const ADMIN_DASHBOARD = '/admin-dashboard';
+  static const REACTIVATE_FORM = '/reactivate-form';
+  static const REACTIVATE_CONFIRM = '/reactivate-confirm';
 }

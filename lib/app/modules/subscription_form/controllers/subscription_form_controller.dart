@@ -6,7 +6,6 @@ import '../../../controllers/storage_service_controller.dart';
 import '../../../data/PlanModel.dart';
 
 class SubscriptionFormController extends GetxController {
-  //TODO: Implement SubscriptionFormController
   TextEditingController allergieController = TextEditingController();
   TextEditingController moreController = TextEditingController();
   TextEditingController nameController = TextEditingController();

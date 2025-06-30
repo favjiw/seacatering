@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 import '../../../data/Subscripton.dart';
 
-
-class SubscriptionConfirmController extends GetxController {
+class ReactivateConfirmController extends GetxController {
+  //TODO: Implement ReactivateConfirmController
   final SubscriptionData data = Get.arguments as SubscriptionData;
   late int mealPrice;
   final double feePerDelivery = 4.3;
@@ -52,24 +52,8 @@ class SubscriptionConfirmController extends GetxController {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) throw Exception("User not logged in");
-      final newDocRef = FirebaseFirestore.instance.collection('subscriptions').doc();
-      final updatedData = SubscriptionData(
-        id: newDocRef.id,
-        name: data.name,
-        phone: data.phone,
-        selectedPlan: data.selectedPlan,
-        selectedPlanId: data.selectedPlanId,
-        selectedMeals: data.selectedMeals,
-        selectedDeliveryDays: data.selectedDeliveryDays,
-        allergies: data.allergies,
-        additionalRequest: data.additionalRequest,
-        isReactivated: data.isReactivated,
-        reactivateCount: data.reactivateCount,
-        startDate: data.startDate,
-        endDate: data.endDate,
-      );
 
-      final subscriptionDoc = updatedData.toFirestoreMap();
+      final subscriptionDoc = data.toFirestoreMap();
       subscriptionDoc.addAll({
         'user_id': uid,
         'total_payment': totalPayment.value.round(),
@@ -77,7 +61,9 @@ class SubscriptionConfirmController extends GetxController {
         'pause_periode_end': null,
       });
 
-      await newDocRef.set(subscriptionDoc);
+      await FirebaseFirestore.instance
+          .collection('subscriptions')
+          .add(subscriptionDoc);
 
       Get.snackbar("Sukses", "Subscription berhasil disimpan");
       Get.offAllNamed('/botnavbar');
@@ -86,7 +72,6 @@ class SubscriptionConfirmController extends GetxController {
       Get.log("Error submitSubscription: $e", isError: true);
     }
   }
-
 
   @override
   void onInit() {

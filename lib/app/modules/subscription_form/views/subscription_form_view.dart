@@ -268,7 +268,6 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
           child: CustomButton(
             text: "Subscribe",
             onPressed: () {
-              // Validasi form
               final isFormValid = controller.formKey.currentState?.validate() ?? false;
               final isCheckboxValid = controller.validateCheckboxFields();
 
@@ -276,15 +275,12 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                 Get.snackbar("Error", "Harap lengkapi semua field");
                 return;
               }
-
-              // Pastikan plan terpilih
               if (controller.selectedPlan.value == null) {
                 Get.snackbar("Error", "Silakan pilih meal plan");
                 return;
               }
-
-              // Kirim data
               final data = SubscriptionData(
+                id: '',
                 name: controller.nameController.text,
                 phone: controller.phoneController.text,
                 selectedPlan: controller.selectedPlan.value!.name,
@@ -294,7 +290,6 @@ class SubscriptionFormView extends GetView<SubscriptionFormController> {
                 allergies: controller.allergieController.text,
                 additionalRequest: controller.moreController.text,
               );
-
               Get.toNamed('/subscription-confirm', arguments: data);
             },
           ),
