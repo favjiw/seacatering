@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/Subscripton.dart';
+import '../../subscription/controllers/subscription_controller.dart';
 
 class ReactivateConfirmController extends GetxController {
-  //TODO: Implement ReactivateConfirmController
   final SubscriptionData data = Get.arguments as SubscriptionData;
   late int mealPrice;
   final double feePerDelivery = 4.3;
   final RxDouble totalPayment = 0.0.obs;
+  final RxBool isUpdating = false.obs;
+  final SubscriptionController _subscriptionController = Get.find();
 
   String get formattedTotal => NumberFormat.currency(
     locale: 'id_ID',
@@ -48,30 +50,87 @@ class ReactivateConfirmController extends GetxController {
         feePerDelivery;
   }
 
-  Future<void> submitSubscription() async {
+  Future<void> reactivateExistingSubscription() async {
     try {
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) throw Exception("User not logged in");
+      isUpdating.value = true;
 
-      final subscriptionDoc = data.toFirestoreMap();
-      subscriptionDoc.addAll({
-        'user_id': uid,
-        'total_payment': totalPayment.value.round(),
+      if (_subscriptionController.hasActiveSubscription) {
+        Get.snackbar('Error', 'You already have an active subscription');
+        return;
+      }
+
+      final doc = await FirebaseFirestore.instance
+          .collection('subscriptions')
+          .doc(data.id)
+          .get();
+
+      final currentTotalPayment = doc['total_payment'] ?? 0;
+      if (currentTotalPayment is! int) {
+        throw Exception('Invalid total_payment format in database');
+      }
+
+      _initPayment();
+      final newPayment = totalPayment.value.round();
+      final updatedTotalPayment = currentTotalPayment + newPayment;
+
+      final now = DateTime.now();
+      final updateData = {
+        'status': 'ACTIVE',
+        'start_date': Timestamp.fromDate(now),
+        'end_date': Timestamp.fromDate(now.add(Duration(days: 30))),
+        'is_reactivated': true,
+        'reactivate_count': FieldValue.increment(1),
+        'total_payment': updatedTotalPayment, // Gunakan nilai yang diakumulasi
+        'payment_status': 'PENDING',
+        'last_reactivated_at': FieldValue.serverTimestamp(),
+        'cancelled_at': null,
         'pause_periode_start': null,
         'pause_periode_end': null,
-      });
+        'updated_at': FieldValue.serverTimestamp(),
+      };
+
+      final paymentSuccess = await _processPayment(newPayment);
+      if (!paymentSuccess) {
+        throw Exception('Payment processing failed');
+      }
 
       await FirebaseFirestore.instance
           .collection('subscriptions')
-          .add(subscriptionDoc);
+          .doc(data.id)
+          .update({
+        ...updateData,
+        'payment_status': 'PAID',
+        'paid_at': FieldValue.serverTimestamp(),
+      });
 
-      Get.snackbar("Sukses", "Subscription berhasil disimpan");
+      await _subscriptionController.fetchAllSubscriptions();
+
+      Get.snackbar(
+          'Success',
+          'Subscription reactivated!'
+      );
       Get.offAllNamed('/botnavbar');
+
     } catch (e) {
-      Get.snackbar("Error", "Gagal menyimpan subscription: $e");
-      Get.log("Error submitSubscription: $e", isError: true);
+      Get.snackbar(
+          'Error',
+          'Failed to reactivate: ${e.toString().replaceAll('Exception: ', '')}'
+      );
+      Get.log("Reactivate error: $e", isError: true);
+    } finally {
+      isUpdating.value = false;
     }
   }
+
+  Future<bool> _processPayment(int amount) async {
+    try {
+      await Future.delayed(Duration(seconds: 2));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
 
   @override
   void onInit() {

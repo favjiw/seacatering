@@ -16,7 +16,7 @@ class ReactivateConfirmView extends GetView<ReactivateConfirmController> {
     return Scaffold(
       backgroundColor: AppColors.pageBackground,
       appBar: AppBar(
-        title: Text('Confirm Subscription'),
+        title: Text('Confirm Reactivation'),
         centerTitle: true,
         titleTextStyle: AppTextStyle.appBarTitle,
         backgroundColor: AppColors.pageBackground,
@@ -146,13 +146,11 @@ class ReactivateConfirmView extends GetView<ReactivateConfirmController> {
         child: CustomButton(
           width: 277.w,
           height: 58.h,
-          text: "Confirm",
-          onPressed: () {
-            controller.submitSubscription();
-            Get.log(controller.data.selectedPlan);
-            Get.log(controller.data.selectedPlanId);
-          },
-        ),
+          text: controller.isUpdating.value ? "Processing..." : "Confirm Reactivation",
+          onPressed: controller.isUpdating.value
+              ? null
+              : () => controller.reactivateExistingSubscription(),
+        )
       ),
     );
   }

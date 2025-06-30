@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:seacatering/app/shared/widgets/custom_button.dart';
 
+import '../../../data/Subscripton.dart';
 import '../../../shared/constants/colors.dart';
 import '../../../shared/constants/text_style.dart';
 import '../controllers/subscription_controller.dart';
@@ -419,6 +420,32 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   void _confirmReactivate(String subscriptionId) {
+    final subscriptionData = controller.subscriptionHistory.firstWhere(
+          (sub) => sub['id'] == subscriptionId,
+      orElse: () => {},
+    );
+
+    if (subscriptionData.isEmpty) {
+      Get.snackbar('Error', 'Subscription data not found');
+      return;
+    }
+
+    final dataToPass = SubscriptionData(
+      id: subscriptionId,
+      name: subscriptionData['user_name'] ?? 'No Name',
+      phone: subscriptionData['phone_number'] ?? 'No Phone',
+      selectedPlan: subscriptionData['plan_name'] ?? 'No Plan',
+      selectedPlanId: subscriptionData['plan_id'] ?? '',
+      selectedMeals: List<String>.from(subscriptionData['meal_type'] ?? []),
+      selectedDeliveryDays: List<String>.from(subscriptionData['delivery_days'] ?? []),
+      allergies: subscriptionData['allergies'] ?? '',
+      additionalRequest: subscriptionData['additional_request'] ?? '',
+      isReactivated: subscriptionData['is_reactivated'] ?? false,
+      reactivateCount: subscriptionData['reactivate_count'] ?? 0,
+      startDate: subscriptionData['start_date']?.toDate(),
+      endDate: subscriptionData['end_date']?.toDate(),
+    );
+
     Get.defaultDialog(
       title: 'Reactivate Subscription',
       titleStyle: AppTextStyle.adminBlackTitle,
@@ -447,9 +474,12 @@ class SubscriptionView extends GetView<SubscriptionController> {
               try {
                 controller.isUpdating.value = true;
                 Get.log("Reactivate button pressed");
-                await controller.reactivateSubscription(subscriptionId);
+
+                Get.toNamed(
+                  '/reactivate-confirm',
+                  arguments: dataToPass,
+                );
               } finally {
-                Get.back(closeOverlays: true);
                 controller.isUpdating.value = false;
               }
             },
