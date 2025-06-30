@@ -54,6 +54,7 @@ class ContactView extends GetView<ContactController> {
                             CircleAvatar(
                               radius: 50.r,
                               backgroundColor: AppColors.yellowTitle,
+                              child: Icon(Icons.person_pin, size: 50.sp, color: AppColors.black,),
                             ),
                             SizedBox(width: 20.w),
                             Column(
@@ -73,16 +74,21 @@ class ContactView extends GetView<ContactController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '08123456789',
+                              controller.phoneNumber.value,
                               style: AppTextStyle.titleContact,
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await controller.copyPhoneNumber();
+
+                              },
                               padding: EdgeInsets.zero,
-                              icon: Icon(
+                              icon: Obx(() => Icon(
                                 Icons.copy_rounded,
-                                color: AppColors.gray,
-                              ),
+                                color: controller.justCopied.value
+                                    ? AppColors.primary
+                                    : AppColors.gray,
+                              )),
                             ),
                           ],
                         ),
@@ -104,7 +110,7 @@ class ContactView extends GetView<ContactController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: controller.contactViaWhatsApp,
                           child: Container(
                             padding: EdgeInsets.all(7),
                             width: 50.w,

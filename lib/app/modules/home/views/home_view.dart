@@ -139,14 +139,14 @@ class HomeView extends GetView<HomeController> {
                 ),
               );
             }),
+            SizedBox(height: 14.h,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 27.w),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text('Testimony', style: AppTextStyle.homeTitle),
-                  TextButton(onPressed: (){}, child: Text('See All', style: AppTextStyle.primaryBtn,),),
                 ],
               ),
             ),

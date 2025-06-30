@@ -10,6 +10,7 @@ class SubscriptionController extends GetxController {
   final isLoading = true.obs;
   final isUpdating = false.obs;
   final isFetchingPlanName = false.obs;
+  final refreshPage = false.obs;
 
   final allSubscriptions = <Map<String, dynamic>>[].obs;
   final currentSubscription = Rx<Map<String, dynamic>?>(null);
@@ -45,6 +46,15 @@ class SubscriptionController extends GetxController {
 
   bool isDateSelectable(DateTime date) {
     return date.isAfter(subscriptionStartDate) && date.isBefore(subscriptionEndDate);
+  }
+
+  bool get hasActiveSubscription {
+    return allSubscriptions.any((sub) => sub['status'] == 'ACTIVE');
+  }
+
+  void triggerRefresh() {
+    refreshPage.value = true;
+    fetchAllSubscriptions().then((_) => refreshPage.value = false);
   }
 
   Future<void> fetchAllSubscriptions() async {
@@ -93,8 +103,13 @@ class SubscriptionController extends GetxController {
     }
   }
 
-  Future<void> reactivateSubscription(String subscriptionId) async {
+  Future<bool> reactivateSubscription(String subscriptionId) async {
     try {
+      if (hasActiveSubscription) {
+        Get.snackbar('Error', 'You already have an active subscription');
+        return false;
+      }
+
       isUpdating.value = true;
       final now = DateTime.now();
       final newEndDate = now.add(Duration(days: 30));
@@ -114,8 +129,10 @@ class SubscriptionController extends GetxController {
 
       await fetchAllSubscriptions();
       Get.snackbar('Success', 'Subscription has been reactivated');
+      return true;
     } catch (e) {
       Get.snackbar('Error', 'Failed to reactivate subscription: $e');
+      return false;
     } finally {
       isUpdating.value = false;
     }

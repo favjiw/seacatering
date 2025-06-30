@@ -178,87 +178,122 @@ class SubscriptionView extends GetView<SubscriptionController> {
               (data['is_reactivated'] != true ||
                   (data['reactivate_count'] ?? 0) < 3);
 
+          final hasActiveSubscription = controller.hasActiveSubscription;
+          final endDate = data['end_date']?.toDate() ?? DateTime.now();
+          final isExpired = endDate.isBefore(DateTime.now());
+
           return Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              width: 333.w,
-              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(20.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),],
-              ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            width: 333.w,
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(20.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Row(
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100.r),
+                      child: SizedBox(),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(100.r),
-                          child: SizedBox(),
+                        Text(
+                          data['status'] ?? 'Unknown Status',
+                          style: AppTextStyle.confVal,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data['status'] ?? 'Unknown Status',
-                              style: AppTextStyle.confVal,
-                            ),
-                            //name
-                            Text(
-                              data['plan_name'] ?? 'Unknown Plan',
-                              style: AppTextStyle.confVal,
-                            ),
-                            Text(
-                              '${controller.formatDate(data['created_at'])}',
-                              style: AppTextStyle.confVal,
-                            ),
-                            //end date
-                            Text(
-                              '${controller.formatDate(data['end_date'])}',
-                              style: AppTextStyle.confVal,
-                            ),
-                          ],
+                        Text(
+                          data['plan_name'] ?? 'Unknown Plan',
+                          style: AppTextStyle.confVal,
                         ),
+                        Text(
+                          '${controller.formatDate(data['created_at'])}',
+                          style: AppTextStyle.confVal,
+                        ),
+                        Text(
+                          '${controller.formatDate(data['end_date'])}',
+                          style: AppTextStyle.confVal,
+                        ),
+                        if (isExpired)
+                          Text(
+                            'Expired',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                            ),
+                          ),
                       ],
                     ),
-                    SizedBox(height: 10.h,),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${controller.formatCurrency(data['total_payment'])}',
-                            style: AppTextStyle.confVal,
-                          ),
-                          SizedBox(height: 10.h,),
-                          CustomButton(
-                            text: 'Reactivate',
-                            onPressed: isCanceled ? () => _confirmReactivate(data['id']) : null,
-                          ),
-                          SizedBox(height: 10.h,),
-                          CustomButton(
-                            text: 'Review',
-                            onPressed: () {
-                              Get.toNamed('/testimony', arguments: {
-                                'subscriptionId': data['id'],
-                                'planId': data['plan_id'],
-                                'planName': data['plan_name'],
-                                'deliveryDays': data['delivery_days'],
-                                'mealTypes': data['meal_type'],
-                              });
-                            },
-                          ),
-                        ],
+                  ],
+                ),
+                SizedBox(height: 10.h),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${controller.formatCurrency(data['total_payment'])}',
+                        style: AppTextStyle.confVal,
                       ),
-                    ),
-                  ])
+                      SizedBox(height: 10.h),
+                      if (isCanceled && canReactivate)
+                        Column(
+                          children: [
+                            CustomButton(
+                              text: 'Reactivate',
+                              onPressed: (hasActiveSubscription || isExpired)
+                                  ? null
+                                  : () => _confirmReactivate(data['id']),
+                              backgroundColor: (hasActiveSubscription || isExpired)
+                                  ? Colors.grey
+                                  : AppColors.primary,
+                            ),
+                            if (hasActiveSubscription || isExpired)
+                              Padding(
+                                padding: EdgeInsets.only(top: 5.h),
+                                child: Text(
+                                  hasActiveSubscription
+                                      ? 'You already have an active subscription'
+                                      : 'This subscription has expired',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      SizedBox(height: 10.h),
+                      CustomButton(
+                        text: 'Review',
+                        onPressed: () {
+                          Get.toNamed('/testimony', arguments: {
+                            'subscriptionId': data['id'],
+                            'planId': data['plan_id'],
+                            'planName': data['plan_name'],
+                            'deliveryDays': data['delivery_days'],
+                            'mealTypes': data['meal_type'],
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
       );
@@ -386,29 +421,45 @@ class SubscriptionView extends GetView<SubscriptionController> {
   void _confirmReactivate(String subscriptionId) {
     Get.defaultDialog(
       title: 'Reactivate Subscription',
+      titleStyle: AppTextStyle.adminBlackTitle,
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text('This will:'),
-          Text('- Set start date to today'),
-          Text('- Set end date to 1 month from now'),
-          Text('- Reset subscription status to ACTIVE'),
-          SizedBox(height: 10),
-          Text('Are you sure?'),
+          Text('This will:', style: AppTextStyle.body),
+          SizedBox(height: 4.h),
+          Text('- Set start date to today', style: AppTextStyle.body),
+          Text('- Set end date to 1 month from now', style: AppTextStyle.body),
+          Text('- Reset subscription status to ACTIVE', style: AppTextStyle.body),
+          SizedBox(height: 10.h),
+          Text('Are you sure?', style: AppTextStyle.body),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Get.back(),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         Obx(
               () => ElevatedButton(
             onPressed: controller.isUpdating.value
                 ? null
-                : () => controller.reactivateSubscription(subscriptionId),
+                : () async {
+              try {
+                controller.isUpdating.value = true;
+                Get.log("Reactivate button pressed");
+                await controller.reactivateSubscription(subscriptionId);
+              } finally {
+                Get.back(closeOverlays: true);
+                controller.isUpdating.value = false;
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+            ),
             child: controller.isUpdating.value
-                ? CircularProgressIndicator()
-                : Text('Confirm Reactivate'),
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text('Confirm Reactivate'),
           ),
         ),
       ],
@@ -416,8 +467,6 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   void _confirmCancelSubscription() {
-    final controller = Get.find<SubscriptionController>();
-
     Get.defaultDialog(
       title: 'Cancel Subscription',
       titleStyle: AppTextStyle.adminBlackTitle,
@@ -469,7 +518,6 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   void _confirmPauseSubscription() {
-    final controller = Get.find<SubscriptionController>();
     DateTime startDate = DateTime.now();
     if (startDate.isBefore(controller.subscriptionStartDate)) {
       startDate = controller.subscriptionStartDate;
@@ -572,7 +620,6 @@ class SubscriptionView extends GetView<SubscriptionController> {
   }
 
   void _confirmResumeSubscription() {
-    final controller = Get.find<SubscriptionController>();
     Get.defaultDialog(
       title: 'Resume Subscription',
       titleStyle: AppTextStyle.adminBlackTitle,
