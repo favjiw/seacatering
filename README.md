@@ -15,6 +15,7 @@
 
 - [Getting Started](#getting-started)
 - [Demo](#demo)
+- [Demo Accounts](#demo-accounts)
 - [Features](#features)
 - [Architecture](#architecture)
 - [Dependencies](#dependencies)
@@ -63,6 +64,17 @@ Follow these steps to set up the project locally:
     <td><img src="https://github.com/user-attachments/assets/31455620-20e8-4412-bcec-265f137c81cb" width="200"/></td>
   </tr>
 </table>
+
+## Demo Accounts
+You can use the following demo accounts to explore the app:
+
+### Admin Account
+- **Email:** brian@gmail.com  
+- **Password:** admin123
+
+### User Account
+- **Email:** johndoe17@gmail.com  
+- **Password:** Johncomp17_
 
 ## Features
 - Splash screen
