@@ -80,38 +80,45 @@ class LoginView extends GetView<LoginController> {
                           return null;
                         },
                       ),),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                          onPressed: () {},
-                          child: Text('Forgot Password?', style: AppTextStyle.textBtn,),
-                        ),
-                      ),
-                      SizedBox(height: 20.h),
-                      CustomButton(
+                      // Align(
+                      //   alignment: Alignment.centerRight,
+                      //   child: TextButton(
+                      //     style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                      //     onPressed: () {},
+                      //     child: Text('Forgot Password?', style: AppTextStyle.textBtn,),
+                      //   ),
+                      // ),
+                      SizedBox(height: 40.h),
+                      Obx(() => CustomButton(
                         width: 271.w,
                         height: 60.h,
-                        text: 'Sign in',
+                        text: controller.isLoading.value ? 'Signing in...' : 'Sign in',
                         textStyle: AppTextStyle.whiteOnBtn,
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: controller.isLoading.value
+                            ? AppColors.primary.withOpacity(0.7)
+                            : AppColors.primary,
                         borderRadius: 15.r,
-                        onPressed: () {
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : () {
                           if (controller.formKey.currentState!.validate()) {
-                              controller.signIn(controller.emailController.text, controller.passwordController.text);
-                            } else {
-                              Get.snackbar(
-                                'Form Error',
-                                'Please fill in both email and password.',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red.withOpacity(0.8),
-                                colorText: Colors.white,
-                                margin: const EdgeInsets.all(16),
-                                duration: const Duration(seconds: 2),
-                              );
-                            }
-                          },
-                      ),
+                            controller.signIn(
+                                controller.emailController.text,
+                                controller.passwordController.text
+                            );
+                          } else {
+                            Get.snackbar(
+                              'Form Error',
+                              'Please fill in both email and password.',
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.red.withOpacity(0.8),
+                              colorText: Colors.white,
+                              margin: const EdgeInsets.all(16),
+                              duration: const Duration(seconds: 2),
+                            );
+                          }
+                        },
+                      )),
                     ],
                   ),
                 ),

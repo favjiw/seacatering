@@ -7,6 +7,7 @@ import '../../../controllers/storage_service_controller.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
+  var isLoading = false.obs;
   final storageService = Get.find<StorageService>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final emailController = TextEditingController();
@@ -17,6 +18,7 @@ class LoginController extends GetxController {
 
   Future<void> signIn(String email, String password) async {
     try {
+      isLoading.value = true;
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -30,20 +32,17 @@ class LoginController extends GetxController {
             .get();
 
         if (doc.exists) {
-          // Get user data
           final fullName = doc.data()?['username'] ?? '';
           final userEmail = doc.data()?['email'] ?? '';
-          final role = doc.data()?['role'] ?? 'user'; // Default to 'user'
+          final role = doc.data()?['role'] ?? 'user';
 
-          // Save user data using StorageService
           await storageService.saveUsername(fullName);
           await storageService.saveEmail(userEmail);
-          await storageService.saveRole(role); // Using the new saveRole method
+          await storageService.saveRole(role);
 
           Get.log('User logged in: $fullName');
           Get.log('Role: $role');
 
-          // Navigate based on role
           if (role == 'admin') {
             Get.offAllNamed('/admin-dashboard');
           } else {
@@ -73,6 +72,8 @@ class LoginController extends GetxController {
         margin: const EdgeInsets.all(16),
         duration: const Duration(seconds: 3),
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 

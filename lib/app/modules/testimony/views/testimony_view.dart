@@ -102,17 +102,39 @@ class TestimonyView extends GetView<TestimonyController> {
         ),
         bottomNavigationBar: Container(
           padding: EdgeInsets.symmetric(horizontal: 49.w, vertical: 15.h),
-          child: CustomButton(
-            text: "Send a Testimony",
-            onPressed: () {
-              final isFormValid = controller.formKey.currentState?.validate() ?? false;
-              if (!isFormValid) {
-                Get.snackbar("Error", "Harap lengkapi semua field");
-                return;
-              }
-              controller.submitTestimony();
-            },
-          ),
+          child: Obx(() => SizedBox(
+            width: double.infinity,
+            height: 56.h,
+            child: ElevatedButton(
+              onPressed: controller.isLoading.value
+                  ? null
+                  : () {
+                final isFormValid = controller.formKey.currentState?.validate() ?? false;
+                if (!isFormValid) {
+                  Get.snackbar("Error", "Please complete all fields");
+                  return;
+                }
+                controller.submitTestimony();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: controller.isLoading.value
+                    ? AppColors.primary.withOpacity(0.7)
+                    : AppColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+              ),
+              child: controller.isLoading.value
+                  ? const CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 3,
+              )
+                  : Text(
+                "Send a Testimony",
+                style: AppTextStyle.whiteOnBtn,
+              ),
+            ),
+          )),
         ),
       ),
     );

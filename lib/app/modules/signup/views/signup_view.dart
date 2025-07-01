@@ -175,21 +175,38 @@ class SignupView extends GetView<SignupController> {
                         },
                       ),),
                       SizedBox(height: 50.h,),
-                      Center(
-                        child: CustomButton(
+                      Obx(() => Center(
+                        child: SizedBox(
                           width: 271.w,
                           height: 60.h,
-                          text: 'Sign up',
-                          textStyle: AppTextStyle.whiteOnBtn,
-                          backgroundColor: AppColors.primary,
-                          borderRadius: 15.r,
-                          onPressed: () {
-                            if (controller.formKey.currentState!.validate()) {
-                              controller.signUp();
-                            }
-                          },
+                          child: ElevatedButton(
+                            onPressed: controller.isLoading.value
+                                ? null
+                                : () {
+                              if (controller.formKey.currentState!.validate()) {
+                                controller.signUp();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: controller.isLoading.value
+                                  ? AppColors.primary.withOpacity(0.7)
+                                  : AppColors.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                            ),
+                            child: controller.isLoading.value
+                                ? const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            )
+                                : Text(
+                              'Sign up',
+                              style: AppTextStyle.whiteOnBtn,
+                            ),
+                          ),
                         ),
-                        ),
+                      )),
                     ],
                   ),
                 ),

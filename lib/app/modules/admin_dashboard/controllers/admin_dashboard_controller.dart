@@ -5,11 +5,6 @@ import 'package:intl/intl.dart';
 
 class AdminDashboardController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final NumberFormat currencyFormat = NumberFormat.currency(
-    locale: 'id_ID',
-    symbol: 'Rp',
-    decimalDigits: 0,
-  );
 
   var isLoading = true.obs;
   var newSubscriptions = 0.obs;
@@ -17,12 +12,19 @@ class AdminDashboardController extends GetxController {
   var monthlyRevenue = 0.obs;
   var reactivations = 0.obs;
   var activeSubscriptions = 0.obs;
+  var activeSubscriptionsInRange = 0.obs;
   var cancelledSubscriptions = 0.obs;
   var subscriptionGrowthData = <Map<String, dynamic>>[].obs;
   var selectedDateRange = DateTimeRange(
     start: DateTime.now().subtract(Duration(days: 30)),
     end: DateTime.now(),
   ).obs;
+
+  final NumberFormat currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp',
+    decimalDigits: 0,
+  );
 
   @override
   void onInit() {
@@ -53,7 +55,7 @@ class AdminDashboardController extends GetxController {
       final startTimestamp = Timestamp.fromDate(dateRange.start);
       final endTimestamp = Timestamp.fromDate(dateRange.end);
 
-      // 1. New subscriptions (created within date range)
+      // 1. New subscriptions
       final newSubsQuery = await _firestore
           .collection('subscriptions')
           .where('created_at', isGreaterThanOrEqualTo: startTimestamp)
@@ -61,17 +63,22 @@ class AdminDashboardController extends GetxController {
           .get();
       newSubscriptions.value = newSubsQuery.docs.length;
 
-      // 2. Total subscriptions all time (all subscriptions regardless of status)
-      final allSubsQuery = await _firestore
+      // 2. Active subscriptions
+      final activeInRangeQuery = await _firestore
           .collection('subscriptions')
+          .where('status', isEqualTo: 'ACTIVE')
+          .where('start_date', isLessThanOrEqualTo: endTimestamp)
           .get();
-      totalSubscriptionsAllTime.value = allSubsQuery.docs.length;
 
-      // 3. Monthly revenue (sum of payments from ACTIVE subscriptions in date range)
+      activeSubscriptionsInRange.value = activeInRangeQuery.docs.where((doc) {
+        final endDate = doc['end_date'] as Timestamp?;
+        return endDate == null || endDate.toDate().isAfter(dateRange.start);
+      }).length;
+
+      // 3. MMR
       int revenue = 0;
       final revenueQuery = await _firestore
           .collection('subscriptions')
-          .where('status', isEqualTo: 'ACTIVE')
           .where('created_at', isGreaterThanOrEqualTo: startTimestamp)
           .where('created_at', isLessThanOrEqualTo: endTimestamp)
           .get();
@@ -81,7 +88,7 @@ class AdminDashboardController extends GetxController {
       }
       monthlyRevenue.value = revenue;
 
-      // 4. Reactivations (status changed from CANCELLED to ACTIVE in date range)
+      // 4. Reactivations
       final reactivationsQuery = await _firestore
           .collection('subscriptions')
           .where('is_reactivated', isEqualTo: true)
@@ -90,7 +97,7 @@ class AdminDashboardController extends GetxController {
           .get();
       reactivations.value = reactivationsQuery.docs.length;
 
-      // 5. Active subscriptions (current ACTIVE subscriptions)
+      // 5. Active subscriptions
       final activeSubsQuery = await _firestore
           .collection('subscriptions')
           .where('status', isEqualTo: 'ACTIVE')
@@ -105,7 +112,7 @@ class AdminDashboardController extends GetxController {
           .get();
       cancelledSubscriptions.value = cancelledQuery.docs.length;
 
-      // 6. Subscription growth (last 12 months)
+      // 6. Subscription graph (all status)
       final growthData = <Map<String, dynamic>>[];
       final now = DateTime.now();
 
@@ -114,22 +121,22 @@ class AdminDashboardController extends GetxController {
         final monthEnd = DateTime(now.year, now.month - i + 1, 0);
         final monthEndTimestamp = Timestamp.fromDate(monthEnd);
 
-        // Get subscriptions active at the end of each month
         final query = await _firestore
             .collection('subscriptions')
             .where('start_date', isLessThanOrEqualTo: monthEndTimestamp)
             .get();
 
-        final activeAtMonthEnd = query.docs.where((doc) {
-          final status = doc['status'] as String?;
+        final subscriptionsAtMonthEnd = query.docs.where((doc) {
+          final startDate = doc['start_date'] as Timestamp?;
           final endDate = doc['end_date'] as Timestamp?;
-          return status == 'ACTIVE' &&
-              (endDate == null || endDate.toDate().isAfter(monthEnd));
+
+          return startDate != null &&
+              (endDate == null || endDate.toDate().isAfter(monthStart));
         }).length;
 
         growthData.add({
           'month': DateFormat('MMM y').format(monthStart),
-          'count': activeAtMonthEnd,
+          'count': subscriptionsAtMonthEnd,
         });
       }
       subscriptionGrowthData.value = growthData;

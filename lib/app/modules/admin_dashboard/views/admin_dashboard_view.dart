@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../shared/constants/colors.dart';
 import '../../../shared/constants/text_style.dart';
+import '../../../shared/widgets/custom_button.dart';
 import '../controllers/admin_dashboard_controller.dart';
 
 class AdminDashboardView extends GetView<AdminDashboardController> {
@@ -31,8 +32,12 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text('Dashboard', style: AppTextStyle.appBarTitle),
-                  InkWell(
-                    onTap: ()async{
+                  CustomButton(
+                    text: 'Logout',
+                    width: 100.w,
+                    height: 40.h,
+                    backgroundColor: Colors.redAccent,
+                    onPressed: ()async{
                       try {
                         await FirebaseAuth.instance.signOut();
                         Get.offAllNamed('/login');
@@ -40,10 +45,6 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
                         Get.snackbar('Logout Error', e.toString());
                       }
                     },
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.gray,
-                      radius: 25.r,
-                    ),
                   ),
                 ],
               ),
@@ -141,9 +142,9 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
               AppColors.black,
             ),
             _buildMetricCard(
-              'Total',
+              'Growth',
               'Subscription',
-              controller.totalSubscriptionsAllTime.value.toString(),
+              controller.activeSubscriptionsInRange.value.toString(),
               AppColors.white,
               showAllTime: true,
             ),
@@ -201,8 +202,6 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
           Text(value, style: backgroundColor == AppColors.white
               ? AppTextStyle.adminBlackNum
               : AppTextStyle.adminWhtNum),
-          if (showAllTime) SizedBox(height: 5.h),
-          if (showAllTime) Text('All Time', style: AppTextStyle.adminBlackTitle),
         ],
       ),
     );
@@ -260,7 +259,7 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
       width: double.maxFinite,
       child: Obx(() {
         return SfCartesianChart(
-          title: ChartTitle(text: 'Subscription Growth'),
+          title: ChartTitle(text: 'Subscription Total (all status)'),
           legend: Legend(isVisible: true),
           primaryXAxis: CategoryAxis(),
           series: <CartesianSeries>[
@@ -299,7 +298,7 @@ class AdminDashboardView extends GetView<AdminDashboardController> {
                 if (args.value is PickerDateRange) {
                   final range = args.value;
                   if (range.startDate != null && range.endDate != null) {
-                    // No date adjustment here - let the controller handle it
+                    Navigator.of(context).pop();
                     controller.updateDateRange(DateTimeRange(
                       start: range.startDate!,
                       end: range.endDate!,
